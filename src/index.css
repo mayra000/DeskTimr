@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap');
+
+:root {
+  --dt-bg-standing: #1a2f23;
+  --dt-bg-sitting: #18122a;
+  --dt-posture-fill-sitting: rgba(88, 52, 118, 0.52);
+  --dt-posture-fill-standing: rgba(72, 118, 92, 0.48);
+  --dt-text: #f4f7f4;
+  --dt-text-muted: rgba(244, 247, 244, 0.72);
+  --dt-font: 'Outfit', system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+html {
+  --dt-bg: var(--dt-bg-sitting);
+}
+
+html[data-posture='standing'] {
+  --dt-bg: var(--dt-bg-standing);
+}
+
+html[data-posture='sitting'] {
+  --dt-bg: var(--dt-bg-sitting);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  min-height: 100svh;
+  background: var(--dt-bg);
+  transition: background-color 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: var(--dt-font);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
+}
+
+#root {
+  min-height: 100svh;
+}
