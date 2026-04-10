@@ -2,6 +2,16 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## Deploy (Vercel)
+
+This app is a static Vite build. Use **Node.js 20.19+** (see `engines` in `package.json`) locally and on the host.
+
+1. Push the repo to GitHub (or GitLab / Bitbucket).
+2. In [Vercel](https://vercel.com), sign in and choose **Add New → Project**, then import this repository.
+3. Use the defaults Vercel suggests for Vite, or set **Build Command** to `npm run build` and **Output Directory** to `dist`.
+4. Deploy. The project includes `vercel.json` so client-side routes resolve to `index.html` when you add a router later.
+5. Optional: under **Project → Settings → Domains**, attach a custom domain.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
