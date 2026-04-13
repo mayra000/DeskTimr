@@ -1,4 +1,15 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import {
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import {
+  buildActivityLogExport,
+  exportActivityLogExcel,
+  exportActivityLogJson,
+} from '../lib/exportActivityLog'
 import type { WeekDayRow } from '../lib/activitySummary'
 import { formatDurationShort } from '../lib/time'
 
@@ -46,6 +57,19 @@ export function ActivityLogTable({
     }
   }, [])
 
+  const exportPayload = useMemo(
+    () => buildActivityLogExport(todayKey, today, weekRows, weekTotals),
+    [todayKey, today, weekRows, weekTotals],
+  )
+
+  const onExportJson = useCallback(() => {
+    exportActivityLogJson(exportPayload)
+  }, [exportPayload])
+
+  const onExportExcel = useCallback(() => {
+    void exportActivityLogExcel(exportPayload)
+  }, [exportPayload])
+
   return (
     <section
       ref={rootRef}
@@ -53,7 +77,31 @@ export function ActivityLogTable({
       data-visible={emphasized ? 'true' : 'false'}
       aria-label="Sitting and standing time log"
     >
-      <h2 className="activity-log__heading">Your log</h2>
+      <div className="activity-log__title-row">
+        <h2 className="activity-log__heading">Your log</h2>
+        <div
+          className="activity-log__export"
+          role="group"
+          aria-label="Export log data"
+        >
+          <button
+            type="button"
+            className="activity-log__export-btn"
+            onClick={onExportJson}
+            aria-label="Export log as JSON"
+          >
+            JSON
+          </button>
+          <button
+            type="button"
+            className="activity-log__export-btn"
+            onClick={onExportExcel}
+            aria-label="Export log as Excel"
+          >
+            Excel
+          </button>
+        </div>
+      </div>
       <p className="activity-log__lede">
         Time counted while the timer is running (sitting vs standing).
       </p>

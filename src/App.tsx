@@ -58,6 +58,7 @@ function App() {
     toggleSessionDisplayMode,
     setCountdownDurationMs,
     completeCountdownSession,
+    clearAllUserData,
     gamificationSnapshot,
   } = useDeskSession(storage, FACTS.length)
 
@@ -241,6 +242,7 @@ function App() {
         <WeeklySummary
           label="TIME SPENT SITTING THIS WEEK:"
           weeklySittingMs={state.weeklySittingMs}
+          onClearData={clearAllUserData}
         />
       </footer>
 

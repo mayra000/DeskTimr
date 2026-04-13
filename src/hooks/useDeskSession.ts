@@ -297,6 +297,24 @@ export function useDeskSession(storage: DeskStorage, factCount: number) {
     })
   }, [persist, reconcile])
 
+  /** Wipe saved logs, weekly totals, and reset the timer to defaults (local storage). */
+  const clearAllUserData = useCallback(() => {
+    const now = new Date()
+    const t = Date.now()
+    lastReconcileAt.current = t
+    setNowMs(t)
+    const base = defaultState()
+    const w = ensureWeekKey(base, now)
+    const next: PersistedDeskState = {
+      ...w,
+      factIndex: clampFactIndex(0, factCount),
+      dailyLog: pruneDailyLog({}, now),
+      countdownDurationMs: clampCountdownDurationEditableMs(w.countdownDurationMs),
+    }
+    persist(next)
+    setState(next)
+  }, [factCount, persist])
+
   const gamificationSnapshot = useMemo(
     () => computeGamificationSnapshot(state),
     [state],
@@ -315,6 +333,7 @@ export function useDeskSession(storage: DeskStorage, factCount: number) {
     toggleSessionDisplayMode,
     setCountdownDurationMs,
     completeCountdownSession,
+    clearAllUserData,
     gamificationSnapshot,
   }
 }
