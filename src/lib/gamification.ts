@@ -9,10 +9,7 @@
 
 import { getDayKey } from './day'
 import { getWeekDayRows } from './activitySummary'
-import {
-  DEFAULT_STANDING_GOAL_MS,
-  isGamificationWorkday,
-} from './gamificationRules'
+import { clampStandingGoalMs, isGamificationWorkday } from './gamificationRules'
 import type { DailyPostureMs, PersistedDeskState } from './types'
 
 function startOfLocalDay(d: Date): Date {
@@ -138,8 +135,8 @@ export interface GamificationSnapshot {
 export function computeGamificationSnapshot(
   state: PersistedDeskState,
   now: Date,
-  standingGoalMs: number = DEFAULT_STANDING_GOAL_MS,
 ): GamificationSnapshot {
+  const standingGoalMs = clampStandingGoalMs(state.standingGoalMs)
   return {
     standingGoalMs,
     gamificationActiveToday: isGamificationWorkday(now),

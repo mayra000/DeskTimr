@@ -38,6 +38,7 @@ import { TimerControls } from './components/TimerControls'
 import { PostureToggle } from './components/PostureToggle'
 import { FactCarousel } from './components/FactCarousel'
 import { WeeklySummary } from './components/WeeklySummary'
+import { StandingGoalControl } from './components/StandingGoalControl'
 import { StandingWeekBadges } from './components/StandingWeekBadges'
 import './App.css'
 
@@ -61,6 +62,8 @@ function App() {
     completeCountdownSession,
     clearAllUserData,
     gamificationSnapshot,
+    standingGoalMs,
+    adjustStandingGoalMs,
   } = useDeskSession(storage, FACTS.length)
 
   const lastSittingHourAnnouncedRef = useRef(0)
@@ -230,20 +233,28 @@ function App() {
               onClear={clearSession}
               onToggleDisplayMode={toggleSessionDisplayMode}
             />
-            <StandingWeekBadges
-              days={gamificationSnapshot.workweekStandingBadges}
-            />
             <PostureToggle label={toggleLabel} onClick={switchPosture} />
           </div>
         </div>
 
         <footer className="app-footer">
-          <FactCarousel
-            fact={fact}
-            onPrev={factPrev}
-            onNext={factNext}
-            autoAdvanceKey={factAutoAnimKey}
-          />
+          <div className="app-footer__left">
+            <div className="footer-standing">
+              <StandingWeekBadges
+                days={gamificationSnapshot.workweekStandingBadges}
+              />
+              <StandingGoalControl
+                goalMs={standingGoalMs}
+                onAdjust={adjustStandingGoalMs}
+              />
+            </div>
+            <FactCarousel
+              fact={fact}
+              onPrev={factPrev}
+              onNext={factNext}
+              autoAdvanceKey={factAutoAnimKey}
+            />
+          </div>
           <WeeklySummary
             label="TIME SPENT SITTING THIS WEEK:"
             weeklySittingMs={state.weeklySittingMs}

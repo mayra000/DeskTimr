@@ -8,6 +8,7 @@ import {
   DEFAULT_COUNTDOWN_DURATION_MS,
   STORAGE_KEY,
 } from './types'
+import { clampStandingGoalMs, DEFAULT_STANDING_GOAL_MS } from './gamificationRules'
 import { clampCountdownDurationMs } from './time'
 
 export interface DeskStorage {
@@ -65,6 +66,7 @@ function migrateV3ToV4(v3: PersistedDeskStateV3): PersistedDeskState {
     dailyLog: v3.dailyLog,
     sessionDisplayMode: 'stopwatch',
     countdownDurationMs: duration,
+    standingGoalMs: DEFAULT_STANDING_GOAL_MS,
   }
 }
 
@@ -93,7 +95,10 @@ function parsePersisted(raw: unknown): PersistedDeskState | null {
       return null
     }
     if (typeof o.countdownDurationMs !== 'number') return null
-    return o
+    const standingGoalMs = clampStandingGoalMs(
+      typeof o.standingGoalMs === 'number' ? o.standingGoalMs : DEFAULT_STANDING_GOAL_MS,
+    )
+    return { ...o, standingGoalMs }
   }
   return null
 }

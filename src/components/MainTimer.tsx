@@ -1,43 +1,10 @@
+import { CaretDownIcon, CaretUpIcon } from './CaretIcons'
 import { formatTwoDigits, msFromHms, msToClockParts } from '../lib/time'
 import type { SessionDisplayMode } from '../lib/types'
 
 const H_MS = 60 * 60 * 1000
 const M_MS = 60 * 1000
 const S_MS = 1000
-
-function CaretUpIcon() {
-  return (
-    <svg
-      className="main-timer__caret-icon"
-      viewBox="0 0 24 24"
-      width="14"
-      height="14"
-      aria-hidden="true"
-    >
-      <path
-        fill="currentColor"
-        d="M12 8l-6 6h12l-6-6z"
-      />
-    </svg>
-  )
-}
-
-function CaretDownIcon() {
-  return (
-    <svg
-      className="main-timer__caret-icon"
-      viewBox="0 0 24 24"
-      width="14"
-      height="14"
-      aria-hidden="true"
-    >
-      <path
-        fill="currentColor"
-        d="M12 16l6-6H6l6 6z"
-      />
-    </svg>
-  )
-}
 
 type Props = {
   label: string
