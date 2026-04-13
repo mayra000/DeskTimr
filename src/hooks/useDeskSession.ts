@@ -316,8 +316,8 @@ export function useDeskSession(storage: DeskStorage, factCount: number) {
   }, [factCount, persist])
 
   const gamificationSnapshot = useMemo(
-    () => computeGamificationSnapshot(state),
-    [state],
+    () => computeGamificationSnapshot(state, new Date(nowMs)),
+    [state, nowMs],
   )
 
   return {

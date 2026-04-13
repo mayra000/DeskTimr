@@ -38,6 +38,7 @@ import { TimerControls } from './components/TimerControls'
 import { PostureToggle } from './components/PostureToggle'
 import { FactCarousel } from './components/FactCarousel'
 import { WeeklySummary } from './components/WeeklySummary'
+import { StandingWeekBadges } from './components/StandingWeekBadges'
 import './App.css'
 
 const storage = createLocalStorageAdapter()
@@ -209,42 +210,47 @@ function App() {
       />
       <Header />
 
-      <div className="app__main">
-        <div className="app__main-content">
-          <MainTimer
-            label={mainTimerLabel}
-            sessionDisplayMode={state.sessionDisplayMode}
-            elapsedMs={sessionElapsedMs}
-            countdownDurationMs={state.countdownDurationMs}
-            running={state.running}
-            onSetCountdownDurationMs={setCountdownDurationMs}
-          />
-          <TimerControls
-            running={state.running}
-            canClear={!state.running && sessionElapsedMs > 0}
-            sessionDisplayMode={state.sessionDisplayMode}
-            onPlay={playWithNotificationOptIn}
-            onPause={pause}
-            onClear={clearSession}
-            onToggleDisplayMode={toggleSessionDisplayMode}
-          />
-          <PostureToggle label={toggleLabel} onClick={switchPosture} />
+      <div className="app__stage">
+        <div className="app__main">
+          <div className="app__main-content">
+            <MainTimer
+              label={mainTimerLabel}
+              sessionDisplayMode={state.sessionDisplayMode}
+              elapsedMs={sessionElapsedMs}
+              countdownDurationMs={state.countdownDurationMs}
+              running={state.running}
+              onSetCountdownDurationMs={setCountdownDurationMs}
+            />
+            <TimerControls
+              running={state.running}
+              canClear={!state.running && sessionElapsedMs > 0}
+              sessionDisplayMode={state.sessionDisplayMode}
+              onPlay={playWithNotificationOptIn}
+              onPause={pause}
+              onClear={clearSession}
+              onToggleDisplayMode={toggleSessionDisplayMode}
+            />
+            <StandingWeekBadges
+              days={gamificationSnapshot.workweekStandingBadges}
+            />
+            <PostureToggle label={toggleLabel} onClick={switchPosture} />
+          </div>
         </div>
-      </div>
 
-      <footer className="app-footer">
-        <FactCarousel
-          fact={fact}
-          onPrev={factPrev}
-          onNext={factNext}
-          autoAdvanceKey={factAutoAnimKey}
-        />
-        <WeeklySummary
-          label="TIME SPENT SITTING THIS WEEK:"
-          weeklySittingMs={state.weeklySittingMs}
-          onClearData={clearAllUserData}
-        />
-      </footer>
+        <footer className="app-footer">
+          <FactCarousel
+            fact={fact}
+            onPrev={factPrev}
+            onNext={factNext}
+            autoAdvanceKey={factAutoAnimKey}
+          />
+          <WeeklySummary
+            label="TIME SPENT SITTING THIS WEEK:"
+            weeklySittingMs={state.weeklySittingMs}
+            onClearData={clearAllUserData}
+          />
+        </footer>
+      </div>
 
       <ActivityLogTable
         todayKey={todayLog.dayKey}
