@@ -76,4 +76,6 @@ export interface PersistedDeskState {
   sessionDisplayMode: SessionDisplayMode
   /** Target duration for countdown mode; always a multiple of COUNTDOWN_STEP_MS */
   countdownDurationMs: number
+  /** Mon–Fri daily standing ring goal; multiple of COUNTDOWN_STEP_MS when clamped */
+  standingGoalMs: number
 }

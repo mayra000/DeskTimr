@@ -1,43 +1,10 @@
+import { CaretDownIcon, CaretUpIcon } from './CaretIcons'
 import { formatTwoDigits, msFromHms, msToClockParts } from '../lib/time'
 import type { SessionDisplayMode } from '../lib/types'
 
 const H_MS = 60 * 60 * 1000
 const M_MS = 60 * 1000
 const S_MS = 1000
-
-function CaretUpIcon() {
-  return (
-    <svg
-      className="main-timer__caret-icon"
-      viewBox="0 0 24 24"
-      width="14"
-      height="14"
-      aria-hidden="true"
-    >
-      <path
-        fill="currentColor"
-        d="M12 8l-6 6h12l-6-6z"
-      />
-    </svg>
-  )
-}
-
-function CaretDownIcon() {
-  return (
-    <svg
-      className="main-timer__caret-icon"
-      viewBox="0 0 24 24"
-      width="14"
-      height="14"
-      aria-hidden="true"
-    >
-      <path
-        fill="currentColor"
-        d="M12 16l6-6H6l6 6z"
-      />
-    </svg>
-  )
-}
 
 type Props = {
   label: string
@@ -54,13 +21,11 @@ function DigitRead({ value }: { value: number }) {
     <>
       <span className="main-timer__part">{formatTwoDigits(h)}</span>
       <span className="main-timer__sep" aria-hidden="true">
-        {' '}
-        :{' '}
+        :
       </span>
       <span className="main-timer__part">{formatTwoDigits(m)}</span>
       <span className="main-timer__sep" aria-hidden="true">
-        {' '}
-        :{' '}
+        :
       </span>
       <span className="main-timer__part">{formatTwoDigits(s)}</span>
     </>
@@ -94,11 +59,12 @@ export function MainTimer({
     <div className="main-timer">
       <p className="main-timer__label">{label}</p>
       {editingCountdown ? (
-        <div
-          className="main-timer__digits main-timer__digits--edit"
-          aria-live="polite"
-        >
-          <div className="main-timer__field">
+        <div className="main-timer__clock">
+          <div
+            className="main-timer__digit-row main-timer__digit-row--edit"
+            aria-live="polite"
+          >
+            <div className="main-timer__field">
             <button
               type="button"
               className="main-timer__caret"
@@ -131,8 +97,7 @@ export function MainTimer({
             </button>
           </div>
           <span className="main-timer__sep" aria-hidden="true">
-            {' '}
-            :{' '}
+            :
           </span>
           <div className="main-timer__field">
             <button
@@ -167,8 +132,7 @@ export function MainTimer({
             </button>
           </div>
           <span className="main-timer__sep" aria-hidden="true">
-            {' '}
-            :{' '}
+            :
           </span>
           <div className="main-timer__field">
             <button
@@ -202,19 +166,29 @@ export function MainTimer({
               <CaretDownIcon />
             </button>
           </div>
+          </div>
+          <div className="main-timer__unit-row" aria-hidden="true">
+            <span>HOURS</span>
+            <span className="main-timer__unit-under-sep" aria-hidden="true" />
+            <span>MINUTES</span>
+            <span className="main-timer__unit-under-sep" aria-hidden="true" />
+            <span>SECONDS</span>
+          </div>
         </div>
       ) : (
-        <div className="main-timer__digits" aria-live="polite">
-          <DigitRead value={displayMs} />
+        <div className="main-timer__clock">
+          <div className="main-timer__digit-row" aria-live="polite">
+            <DigitRead value={displayMs} />
+          </div>
+          <div className="main-timer__unit-row" aria-hidden="true">
+            <span>HOURS</span>
+            <span className="main-timer__unit-under-sep" aria-hidden="true" />
+            <span>MINUTES</span>
+            <span className="main-timer__unit-under-sep" aria-hidden="true" />
+            <span>SECONDS</span>
+          </div>
         </div>
       )}
-      <div className="main-timer__units" aria-hidden="true">
-        <span>HOURS</span>
-        <span className="main-timer__unit-gap" />
-        <span>MINUTES</span>
-        <span className="main-timer__unit-gap" />
-        <span>SECONDS</span>
-      </div>
     </div>
   )
 }

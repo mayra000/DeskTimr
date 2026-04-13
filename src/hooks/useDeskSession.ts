@@ -3,6 +3,10 @@ import { pruneDailyLog, addPostureDeltaAcrossDays } from '../lib/dailyLog'
 import { computeGamificationSnapshot } from '../lib/gamification'
 import { ensureWeekKey, getWeekKey } from '../lib/week'
 import type { DeskStorage } from '../lib/storage'
+import {
+  clampStandingGoalMs,
+  DEFAULT_STANDING_GOAL_MS,
+} from '../lib/gamificationRules'
 import { clampCountdownDurationEditableMs } from '../lib/time'
 import {
   DEFAULT_COUNTDOWN_DURATION_MS,
@@ -24,6 +28,7 @@ function defaultState(): PersistedDeskState {
     dailyLog: {},
     sessionDisplayMode: 'stopwatch',
     countdownDurationMs: DEFAULT_COUNTDOWN_DURATION_MS,
+    standingGoalMs: clampStandingGoalMs(DEFAULT_STANDING_GOAL_MS),
   }
 }
 
@@ -44,6 +49,7 @@ export function useDeskSession(storage: DeskStorage, factCount: number) {
         factIndex: clampFactIndex(w.factIndex, factCount),
         dailyLog: pruneDailyLog(w.dailyLog, now),
         countdownDurationMs: clampCountdownDurationEditableMs(w.countdownDurationMs),
+        standingGoalMs: clampStandingGoalMs(w.standingGoalMs ?? DEFAULT_STANDING_GOAL_MS),
       }
     }
     return defaultState()
@@ -280,6 +286,22 @@ export function useDeskSession(storage: DeskStorage, factCount: number) {
     [persist],
   )
 
+  const adjustStandingGoalMs = useCallback(
+    (deltaMs: number) => {
+      setState((prev) => {
+        const nextMs = clampStandingGoalMs(prev.standingGoalMs + deltaMs)
+        if (nextMs === prev.standingGoalMs) return prev
+        const next: PersistedDeskState = {
+          ...prev,
+          standingGoalMs: nextMs,
+        }
+        persist(next)
+        return next
+      })
+    },
+    [persist],
+  )
+
   const completeCountdownSession = useCallback(() => {
     const t = Date.now()
     reconcile(t)
@@ -316,8 +338,8 @@ export function useDeskSession(storage: DeskStorage, factCount: number) {
   }, [factCount, persist])
 
   const gamificationSnapshot = useMemo(
-    () => computeGamificationSnapshot(state),
-    [state],
+    () => computeGamificationSnapshot(state, new Date(nowMs)),
+    [state, nowMs],
   )
 
   return {
@@ -335,5 +357,7 @@ export function useDeskSession(storage: DeskStorage, factCount: number) {
     completeCountdownSession,
     clearAllUserData,
     gamificationSnapshot,
+    standingGoalMs: state.standingGoalMs,
+    adjustStandingGoalMs,
   }
 }

@@ -72,6 +72,20 @@
   height: 1.5rem;
 }
 
+/**
+ * Fills at least the viewport below the header so the footer can sit near the
+ * bottom (with padding) on first paint; scrolls away with the page when the user
+ * moves down to the activity table.
+ */
+.app__stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+  z-index: 2;
+}
+
 .app__main {
   position: relative;
   z-index: 1;
@@ -106,7 +120,20 @@
   margin-inline: auto;
 }
 
-.main-timer__digits {
+.main-timer__clock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.main-timer__digit-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+  column-gap: 0.12em;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
   font-size: clamp(2.25rem, 8vw, 4rem);
@@ -119,27 +146,23 @@
   opacity: 0.85;
 }
 
-.main-timer__units {
-  display: flex;
-  justify-content: center;
+.main-timer__unit-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  justify-items: center;
   align-items: baseline;
-  gap: clamp(0.5rem, 3vw, 1.75rem);
-  margin-top: 0.65rem;
+  column-gap: 0.12em;
   font-size: clamp(0.55rem, 1.4vw, 0.7rem);
   font-weight: 600;
   color: var(--dt-text);
 }
 
-.main-timer__unit-gap {
-  width: clamp(1.5rem, 6vw, 3rem);
+.main-timer__unit-under-sep {
+  pointer-events: none;
 }
 
-.main-timer__digits--edit {
-  display: flex;
+.main-timer__digit-row--edit {
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.15em 0;
 }
 
 .main-timer__field {
@@ -147,6 +170,8 @@
   flex-direction: column;
   align-items: center;
   gap: 0.06em;
+  min-width: 0;
+  width: 100%;
 }
 
 .main-timer__caret {
@@ -267,6 +292,169 @@
   display: block;
 }
 
+.standing-goal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  flex-shrink: 0;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.standing-goal__caption {
+  margin: 0;
+  font-size: clamp(0.5rem, 1.2vw, 0.6rem);
+  font-weight: 600;
+  color: var(--dt-text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  white-space: nowrap;
+  margin-bottom: 0.2rem;
+}
+
+.standing-goal__row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.standing-goal__carets {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.05rem;
+}
+
+.standing-goal__caret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem;
+  border: none;
+  border-radius: 0.2rem;
+  background: transparent;
+  color: var(--dt-text);
+  cursor: pointer;
+  line-height: 0;
+  opacity: 0.9;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease,
+    opacity 0.15s ease;
+}
+
+.standing-goal__caret:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+  opacity: 1;
+}
+
+.standing-goal__caret:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.standing-goal__caret:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.standing-goal__caret:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.45);
+  outline-offset: 2px;
+}
+
+.standing-goal__value {
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  font-weight: 700;
+  color: var(--dt-text);
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  text-transform: none;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .standing-goal__caret:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+.standing-badges {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(0.65rem, 3.5vw, 1.35rem);
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.35rem 0 0;
+}
+
+.footer-standing .standing-badges {
+  justify-content: flex-start;
+  width: auto;
+  margin-top: 0;
+  padding: 0;
+}
+
+.standing-badges__day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.standing-badges__ring-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+}
+
+.standing-badges__ring-wrap[data-kind='future'] .standing-badges__track {
+  stroke: rgba(255, 255, 255, 0.09);
+}
+
+.standing-badges__track {
+  stroke: rgba(255, 255, 255, 0.16);
+}
+
+.standing-badges__progress {
+  stroke: rgba(255, 255, 255, 0.62);
+}
+
+.standing-badges__complete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: rgba(244, 247, 244, 0.4);
+  color: #1a2f23;
+}
+
+html[data-posture='sitting'] .standing-badges__complete {
+  color: #18122a;
+}
+
+.standing-badges__check {
+  display: block;
+}
+
+.standing-badges__label {
+  font-size: clamp(0.55rem, 1.35vw, 0.65rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--dt-text-muted);
+}
+
 .posture-toggle {
   margin-top: 0.25rem;
   width: 100%;
@@ -292,13 +480,34 @@
 }
 
 .app-footer {
+  flex-shrink: 0;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 1.5rem 2rem;
   align-items: end;
-  padding: 1.25rem clamp(1rem, 4vw, 2.5rem) 2rem;
+  padding: 1.25rem clamp(1rem, 4vw, 2.5rem)
+    calc(64px + env(safe-area-inset-bottom, 0px));
   position: relative;
   z-index: 2;
+}
+
+.app-footer__left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.footer-standing {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.25rem;
+  width: 100%;
 }
 
 @media (max-width: 720px) {
@@ -313,6 +522,10 @@
   align-items: flex-end;
   gap: 0.75rem 1rem;
   max-width: 52ch;
+}
+
+.app-footer__left .fact-carousel {
+  width: 100%;
 }
 
 .fact-carousel__text {
@@ -505,9 +718,11 @@
 .activity-log {
   width: min(96vw, 900px);
   margin: clamp(2.5rem, 12vh, 10rem) auto 0;
-  padding: 1.5rem clamp(1rem, 4vw, 2.5rem) 3rem;
+  padding: 1.5rem clamp(1rem, 4vw, 2.5rem)
+    calc(3rem + env(safe-area-inset-bottom, 0px));
   position: relative;
   z-index: 2;
+  flex-shrink: 0;
   opacity: 0.4;
   transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
