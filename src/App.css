@@ -991,7 +991,7 @@ html[data-posture='sitting'] .standing-badges__complete {
   border: none;
   border-radius: 0.35rem;
   background: #fff;
-  color: #ba4949;
+  color: var(--dt-pomodoro-accent, #ba4949);
   font-family: inherit;
   font-size: clamp(0.85rem, 2.2vw, 1rem);
   font-weight: 700;

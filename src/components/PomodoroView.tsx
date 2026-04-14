@@ -1,4 +1,4 @@
-import { useCallback, useState, type KeyboardEvent } from 'react'
+import { useCallback, useEffect, useState, type KeyboardEvent } from 'react'
 import {
   type PomodoroPhase,
   usePomodoro,
@@ -37,6 +37,13 @@ export function PomodoroView() {
 
   const [draft, setDraft] = useState('')
 
+  useEffect(() => {
+    document.documentElement.dataset.pomodoroPhase = phase
+    return () => {
+      delete document.documentElement.dataset.pomodoroPhase
+    }
+  }, [phase])
+
   const onAddTask = useCallback(() => {
     addTask(draft)
     setDraft('')
@@ -53,7 +60,7 @@ export function PomodoroView() {
   )
 
   return (
-    <div className="pomodoro">
+    <div className="pomodoro" data-pomodoro-phase={phase}>
       <div className="pomodoro__card">
         <div className="pomodoro__tabs" role="tablist" aria-label="Timer mode">
           {TABS.map(({ phase: p, label }) => (
