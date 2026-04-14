@@ -23,6 +23,28 @@ html[data-posture='sitting'] {
   --dt-bg: var(--dt-bg-sitting);
 }
 
+/* Pomodoro app: fallback until data-pomodoro-phase is set by PomodoroView */
+html[data-app-mode='pomodoro'] {
+  --dt-bg: #ba4949;
+  --dt-pomodoro-accent: #9a2d2d;
+  --dt-text-muted: rgba(255, 255, 255, 0.78);
+}
+
+html[data-app-mode='pomodoro'][data-pomodoro-phase='pomodoro'] {
+  --dt-bg: #ba4949;
+  --dt-pomodoro-accent: #9a2d2d;
+}
+
+html[data-app-mode='pomodoro'][data-pomodoro-phase='shortBreak'] {
+  --dt-bg: #3d7d72;
+  --dt-pomodoro-accent: #2a5c54;
+}
+
+html[data-app-mode='pomodoro'][data-pomodoro-phase='longBreak'] {
+  --dt-bg: #396f9a;
+  --dt-pomodoro-accent: #2a5580;
+}
+
 *,
 *::before,
 *::after {
