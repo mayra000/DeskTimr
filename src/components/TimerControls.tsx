@@ -111,14 +111,12 @@ export function TimerControls({
         >
           {countdownActive ? (
             <>
-              {/* Stopwatch-style timer — tap to switch to stopwatch */}
               <line x1="10" x2="14" y1="2" y2="2" />
               <line x1="12" x2="15" y1="14" y2="11" />
               <circle cx="12" cy="14" r="8" />
             </>
           ) : (
             <>
-              {/* Clock — tap to switch to countdown */}
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 6 12 12 16 14" />
             </>

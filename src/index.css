@@ -13,14 +13,20 @@
 
 html {
   --dt-bg: var(--dt-bg-sitting);
+  --dt-desk-cta-text: #2a1a3a;
+  min-height: 100%;
+  min-height: 100dvh;
+  background: var(--dt-bg);
 }
 
 html[data-posture='standing'] {
   --dt-bg: var(--dt-bg-standing);
+  --dt-desk-cta-text: #123a24;
 }
 
 html[data-posture='sitting'] {
   --dt-bg: var(--dt-bg-sitting);
+  --dt-desk-cta-text: #2a1a3a;
 }
 
 /* Pomodoro app: fallback until data-pomodoro-phase is set by PomodoroView */
@@ -58,6 +64,7 @@ body {
 
 body {
   min-height: 100svh;
+  min-height: 100dvh;
   background: var(--dt-bg);
   transition: background-color 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   font-family: var(--dt-font);
@@ -73,4 +80,6 @@ body {
 
 #root {
   min-height: 100svh;
+  min-height: 100dvh;
+  background: var(--dt-bg);
 }

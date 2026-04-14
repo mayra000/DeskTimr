@@ -254,31 +254,33 @@ function App() {
         </div>
       ) : (
         <>
-          <div className="app__stage">
-            <div className="app__main">
-              <div className="app__main-content">
-                <MainTimer
-                  label={mainTimerLabel}
-                  sessionDisplayMode={state.sessionDisplayMode}
-                  elapsedMs={sessionElapsedMs}
-                  countdownDurationMs={state.countdownDurationMs}
-                  running={state.running}
-                  onSetCountdownDurationMs={setCountdownDurationMs}
-                />
-                <TimerControls
-                  running={state.running}
-                  canClear={!state.running && sessionElapsedMs > 0}
-                  sessionDisplayMode={state.sessionDisplayMode}
-                  onPlay={playWithNotificationOptIn}
-                  onPause={pause}
-                  onClear={clearSession}
-                  onToggleDisplayMode={toggleSessionDisplayMode}
-                />
-                <PostureToggle label={toggleLabel} onClick={switchPosture} />
+          <div className="app__stage app__stage--desk">
+            <div className="app__main app__main--desk">
+              <div className="desk-timer">
+                <div className="desk-timer__card">
+                  <MainTimer
+                    label={mainTimerLabel}
+                    sessionDisplayMode={state.sessionDisplayMode}
+                    elapsedMs={sessionElapsedMs}
+                    countdownDurationMs={state.countdownDurationMs}
+                    running={state.running}
+                    onSetCountdownDurationMs={setCountdownDurationMs}
+                  />
+                  <TimerControls
+                    running={state.running}
+                    canClear={!state.running && sessionElapsedMs > 0}
+                    sessionDisplayMode={state.sessionDisplayMode}
+                    onPlay={playWithNotificationOptIn}
+                    onPause={pause}
+                    onClear={clearSession}
+                    onToggleDisplayMode={toggleSessionDisplayMode}
+                  />
+                  <PostureToggle label={toggleLabel} onClick={switchPosture} />
+                </div>
               </div>
             </div>
 
-            <footer className="app-footer">
+            <footer className="app-footer app-footer--desk">
               <div className="app-footer__left">
                 <div className="footer-standing">
                   <StandingWeekBadges
