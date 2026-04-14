@@ -23,6 +23,11 @@ html[data-posture='sitting'] {
   --dt-bg: var(--dt-bg-sitting);
 }
 
+html[data-app-mode='pomodoro'] {
+  --dt-bg: #ba4949;
+  --dt-text-muted: rgba(255, 255, 255, 0.78);
+}
+
 *,
 *::before,
 *::after {

@@ -6,6 +6,7 @@ import {
   useState,
   type CSSProperties,
 } from 'react'
+import type { AppMode } from './components/Header'
 import { FACTS } from './data/facts'
 import { useDeskSession } from './hooks/useDeskSession'
 import {
@@ -33,6 +34,7 @@ import {
 import { createLocalStorageAdapter } from './lib/storage'
 import { ActivityLogTable } from './components/ActivityLogTable'
 import { Header } from './components/Header'
+import { PomodoroView } from './components/PomodoroView'
 import { MainTimer } from './components/MainTimer'
 import { TimerControls } from './components/TimerControls'
 import { PostureToggle } from './components/PostureToggle'
@@ -44,10 +46,23 @@ import './App.css'
 
 const storage = createLocalStorageAdapter()
 
+const APP_MODE_KEY = 'desktimr-app-mode'
+
+function loadAppMode(): AppMode {
+  try {
+    const v = localStorage.getItem(APP_MODE_KEY)
+    if (v === 'pomodoro' || v === 'desk') return v
+  } catch {
+    /* ignore */
+  }
+  return 'desk'
+}
+
 /** Advance the fact carousel automatically (manual prev/next still works). */
 const FACT_AUTO_CYCLE_MS = 30_000
 
 function App() {
+  const [appMode, setAppMode] = useState<AppMode>(() => loadAppMode())
   const {
     state,
     sessionElapsedMs,
@@ -198,9 +213,27 @@ function App() {
     document.documentElement.dataset.posture = state.posture
   }, [state.posture])
 
+  useEffect(() => {
+    if (appMode === 'pomodoro') {
+      document.documentElement.dataset.appMode = 'pomodoro'
+    } else {
+      delete document.documentElement.dataset.appMode
+    }
+    try {
+      localStorage.setItem(APP_MODE_KEY, appMode)
+    } catch {
+      /* ignore */
+    }
+  }, [appMode])
+
+  const onAppModeChange = useCallback((mode: AppMode) => {
+    setAppMode(mode)
+  }, [])
+
   return (
     <div
       className="app"
+      data-app-mode={appMode}
       data-gam-level={gamificationSnapshot.placeholderLevel}
     >
       <div
@@ -211,67 +244,77 @@ function App() {
         }
         aria-hidden="true"
       />
-      <Header />
+      <Header appMode={appMode} onAppModeChange={onAppModeChange} />
 
-      <div className="app__stage">
-        <div className="app__main">
-          <div className="app__main-content">
-            <MainTimer
-              label={mainTimerLabel}
-              sessionDisplayMode={state.sessionDisplayMode}
-              elapsedMs={sessionElapsedMs}
-              countdownDurationMs={state.countdownDurationMs}
-              running={state.running}
-              onSetCountdownDurationMs={setCountdownDurationMs}
-            />
-            <TimerControls
-              running={state.running}
-              canClear={!state.running && sessionElapsedMs > 0}
-              sessionDisplayMode={state.sessionDisplayMode}
-              onPlay={playWithNotificationOptIn}
-              onPause={pause}
-              onClear={clearSession}
-              onToggleDisplayMode={toggleSessionDisplayMode}
-            />
-            <PostureToggle label={toggleLabel} onClick={switchPosture} />
+      {appMode === 'pomodoro' ? (
+        <div className="app__stage app__stage--pomodoro">
+          <div className="app__main app__main--pomodoro">
+            <PomodoroView />
           </div>
         </div>
-
-        <footer className="app-footer">
-          <div className="app-footer__left">
-            <div className="footer-standing">
-              <StandingWeekBadges
-                days={gamificationSnapshot.workweekStandingBadges}
-              />
-              <StandingGoalControl
-                goalMs={standingGoalMs}
-                onAdjust={adjustStandingGoalMs}
-              />
+      ) : (
+        <>
+          <div className="app__stage">
+            <div className="app__main">
+              <div className="app__main-content">
+                <MainTimer
+                  label={mainTimerLabel}
+                  sessionDisplayMode={state.sessionDisplayMode}
+                  elapsedMs={sessionElapsedMs}
+                  countdownDurationMs={state.countdownDurationMs}
+                  running={state.running}
+                  onSetCountdownDurationMs={setCountdownDurationMs}
+                />
+                <TimerControls
+                  running={state.running}
+                  canClear={!state.running && sessionElapsedMs > 0}
+                  sessionDisplayMode={state.sessionDisplayMode}
+                  onPlay={playWithNotificationOptIn}
+                  onPause={pause}
+                  onClear={clearSession}
+                  onToggleDisplayMode={toggleSessionDisplayMode}
+                />
+                <PostureToggle label={toggleLabel} onClick={switchPosture} />
+              </div>
             </div>
-            <FactCarousel
-              fact={fact}
-              onPrev={factPrev}
-              onNext={factNext}
-              autoAdvanceKey={factAutoAnimKey}
-            />
-          </div>
-          <WeeklySummary
-            label="TIME SPENT SITTING THIS WEEK:"
-            weeklySittingMs={state.weeklySittingMs}
-            onClearData={clearAllUserData}
-          />
-        </footer>
-      </div>
 
-      <ActivityLogTable
-        todayKey={todayLog.dayKey}
-        today={{
-          sittingMs: todayLog.sittingMs,
-          standingMs: todayLog.standingMs,
-        }}
-        weekRows={weekRows}
-        weekTotals={weekTotals}
-      />
+            <footer className="app-footer">
+              <div className="app-footer__left">
+                <div className="footer-standing">
+                  <StandingWeekBadges
+                    days={gamificationSnapshot.workweekStandingBadges}
+                  />
+                  <StandingGoalControl
+                    goalMs={standingGoalMs}
+                    onAdjust={adjustStandingGoalMs}
+                  />
+                </div>
+                <FactCarousel
+                  fact={fact}
+                  onPrev={factPrev}
+                  onNext={factNext}
+                  autoAdvanceKey={factAutoAnimKey}
+                />
+              </div>
+              <WeeklySummary
+                label="TIME SPENT SITTING THIS WEEK:"
+                weeklySittingMs={state.weeklySittingMs}
+                onClearData={clearAllUserData}
+              />
+            </footer>
+          </div>
+
+          <ActivityLogTable
+            todayKey={todayLog.dayKey}
+            today={{
+              sittingMs: todayLog.sittingMs,
+              standingMs: todayLog.standingMs,
+            }}
+            weekRows={weekRows}
+            weekTotals={weekTotals}
+          />
+        </>
+      )}
     </div>
   )
 }
