@@ -311,6 +311,7 @@
   padding: 0.35rem 0.35rem 1.5rem;
   background: rgba(255, 255, 255, 0.12);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  padding: 24px 48px;
 }
 
 .desk-timer__card .main-timer__label {
@@ -961,8 +962,9 @@ html[data-posture='sitting'] .standing-badges__complete {
 }
 
 .activity-log__lede {
-  max-width: min(64ch, min(96vw, 900px));
+  max-width: min(96vw, 900px);
   margin: 0 auto 1.5rem;
+  text-align: left;
   font-size: clamp(0.75rem, 1.8vw, 0.85rem);
   font-weight: 600;
   color: var(--al-muted);
