@@ -1051,6 +1051,11 @@ html[data-posture='sitting'] .standing-badges__complete {
   min-height: min(80vh, 900px);
   /* No bottom padding: body/root red was showing through as a strip under the white article */
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* Two grid rows: timer column, then article (sibling in DOM). Keeps the white band out of
+     the same box as the timer so it cannot paint a sliver above the fold. */
+  place-items: start stretch;
+  align-content: start;
+  justify-items: stretch;
 }
 
 .app__stage--pomodoro {
@@ -1060,6 +1065,7 @@ html[data-posture='sitting'] .standing-badges__complete {
 .pomodoro {
   width: min(92vw, 480px);
   margin-inline: auto;
+  justify-self: center;
   text-transform: none;
   letter-spacing: 0.02em;
 }

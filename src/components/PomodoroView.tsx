@@ -1,8 +1,26 @@
-import { useCallback, useEffect, useState, type KeyboardEvent } from 'react'
+import confetti from 'canvas-confetti'
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import {
   type PomodoroPhase,
   usePomodoro,
 } from '../hooks/usePomodoro'
+
+function firePomodoroConfetti() {
+  const count = 200
+  const defaults = { origin: { y: 0.7 } }
+  function fire(particleRatio: number, opts: confetti.Options) {
+    void confetti({
+      ...defaults,
+      ...opts,
+      particleCount: Math.floor(count * particleRatio),
+    })
+  }
+  fire(0.25, { spread: 26, startVelocity: 55 })
+  fire(0.2, { spread: 60 })
+  fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 })
+  fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 })
+  fire(0.1, { spread: 120, startVelocity: 45 })
+}
 
 function formatClock(ms: number): string {
   const totalSec = Math.max(0, Math.floor(ms / 1000))
@@ -21,6 +39,7 @@ export function PomodoroView() {
   const {
     phase,
     remainingMs,
+    pomodorosCompleted,
     tasks,
     activeTask,
     activeTaskId,
@@ -36,6 +55,14 @@ export function PomodoroView() {
   } = usePomodoro()
 
   const [draft, setDraft] = useState('')
+  const prevPomodorosCompleted = useRef(pomodorosCompleted)
+
+  useEffect(() => {
+    if (pomodorosCompleted > prevPomodorosCompleted.current) {
+      firePomodoroConfetti()
+    }
+    prevPomodorosCompleted.current = pomodorosCompleted
+  }, [pomodorosCompleted])
 
   useEffect(() => {
     document.documentElement.dataset.pomodoroPhase = phase
@@ -60,7 +87,8 @@ export function PomodoroView() {
   )
 
   return (
-    <div className="pomodoro" data-pomodoro-phase={phase}>
+    <>
+      <div className="pomodoro" data-pomodoro-phase={phase}>
       <div className="pomodoro__above-fold">
         <div className="pomodoro__card">
           <div className="pomodoro__tabs" role="tablist" aria-label="Timer mode">
@@ -172,6 +200,7 @@ export function PomodoroView() {
           </div>
         </section>
       </div>
+      </div>
 
       <div className="pomodoro-article-surface">
         <div className="pomodoro-article-inner">
@@ -240,21 +269,11 @@ export function PomodoroView() {
                     Cirillo, Francesco — Pomodoro Technique (official overview)
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="https://en.wikipedia.org/wiki/Pomodoro_Technique"
-                    className="pomodoro-article__link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Wikipedia — Pomodoro Technique
-                  </a>
-                </li>
               </ul>
             </section>
           </article>
         </div>
       </div>
-    </div>
+    </>
   )
 }
