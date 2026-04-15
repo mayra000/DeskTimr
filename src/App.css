@@ -34,6 +34,10 @@
   background: var(--dt-posture-fill-standing);
 }
 
+.app[data-app-mode='pomodoro'] {
+  overflow-x: clip;
+}
+
 .app[data-app-mode='pomodoro'] .app__posture-fill {
   opacity: 0;
 }
@@ -1045,7 +1049,8 @@ html[data-posture='sitting'] .standing-badges__complete {
 /* —— Pomodoro —— */
 .app__main--pomodoro {
   min-height: min(80vh, 900px);
-  padding-bottom: 3rem;
+  /* No bottom padding: body/root red was showing through as a strip under the white article */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .app__stage--pomodoro {
@@ -1329,20 +1334,38 @@ html[data-posture='sitting'] .standing-badges__complete {
   min-height: calc(100dvh - var(--app-header-height) - 2rem);
 }
 
-/* Pomodoro: article (below the fold, always visible when scrolled) */
+/* Pomodoro: full-bleed white band below the fold (entire width, not a nested card) */
+.pomodoro-article-surface {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  /* padding-top (not margin-top) so the gap below the timer is white, not body red */
+  padding: calc(2.25rem + clamp(1.75rem, 4vw, 2.75rem)) 0
+    clamp(2.5rem, 5vw, 3.5rem);
+  box-sizing: border-box;
+  background: #fff;
+  color-scheme: light;
+}
+
+.pomodoro-article-inner {
+  width: min(94vw, 44rem);
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 1.5rem);
+  box-sizing: border-box;
+}
+
 .pomodoro-article {
-  margin-top: 2.25rem;
-  padding: 1.5rem 0.15rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.28);
-  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+  padding: 0;
+  border: none;
+  color: #3a342e;
 }
 
 .pomodoro-article__title {
   margin: 0 0 1.25rem;
-  font-size: clamp(1rem, 2.6vw, 1.2rem);
+  font-size: clamp(1.05rem, 2.7vw, 1.35rem);
   font-weight: 700;
-  letter-spacing: 0.04em;
-  color: #fff;
+  letter-spacing: 0.03em;
+  color: #1e1a17;
   line-height: 1.3;
 }
 
@@ -1359,21 +1382,21 @@ html[data-posture='sitting'] .standing-badges__complete {
   font-size: clamp(0.8rem, 2.1vw, 0.95rem);
   font-weight: 700;
   letter-spacing: 0.03em;
-  color: rgba(255, 255, 255, 0.96);
+  color: #25211e;
 }
 
 .pomodoro-article__p {
   margin: 0;
-  font-size: clamp(0.78rem, 2vw, 0.9rem);
+  font-size: clamp(0.82rem, 2vw, 0.95rem);
   font-weight: 400;
   line-height: 1.65;
-  color: rgba(255, 255, 255, 0.82);
+  color: #4a433c;
 }
 
 .pomodoro-article__sources {
   margin-top: 1.75rem;
   padding-top: 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .pomodoro-article__source-list {
@@ -1381,23 +1404,23 @@ html[data-posture='sitting'] .standing-badges__complete {
   padding-left: 1.15rem;
   font-size: clamp(0.75rem, 1.9vw, 0.85rem);
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.78);
+  color: #5c534c;
 }
 
 .pomodoro-article__link {
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--dt-pomodoro-accent, #9a2d2d);
   text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--dt-pomodoro-accent, #ba4949) 55%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--dt-pomodoro-accent, #9a2d2d) 45%, transparent);
   text-underline-offset: 0.15em;
 }
 
 .pomodoro-article__link:hover {
-  color: #fff;
-  text-decoration-color: var(--dt-pomodoro-accent, #ba4949);
+  color: #7a2424;
+  text-decoration-color: var(--dt-pomodoro-accent, #9a2d2d);
 }
 
 .pomodoro-article__link:focus-visible {
-  outline: 2px solid var(--dt-pomodoro-accent, #ba4949);
+  outline: 2px solid var(--dt-pomodoro-accent, #9a2d2d);
   outline-offset: 2px;
   border-radius: 0.15rem;
 }

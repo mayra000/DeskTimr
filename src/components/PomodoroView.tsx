@@ -173,84 +173,88 @@ export function PomodoroView() {
         </section>
       </div>
 
-      <article
-        className="pomodoro-article"
-        aria-labelledby="pomodoro-article-heading"
-      >
-        <h2 id="pomodoro-article-heading" className="pomodoro-article__title">
-          The Pomodoro Technique
-        </h2>
+      <div className="pomodoro-article-surface">
+        <div className="pomodoro-article-inner">
+          <article
+            className="pomodoro-article"
+            aria-labelledby="pomodoro-article-heading"
+          >
+            <h2 id="pomodoro-article-heading" className="pomodoro-article__title">
+              The Pomodoro Technique
+            </h2>
 
-        <section className="pomodoro-article__section" aria-labelledby="pomodoro-what-heading">
-          <h3 id="pomodoro-what-heading" className="pomodoro-article__h">
-            What it is
-          </h3>
-          <p className="pomodoro-article__p">
-            The Pomodoro Technique is a time-management method: you work in focused
-            intervals (classically 25 minutes), then take a short break before the next
-            round. After several focus rounds you take a longer break. The idea is to
-            make deep work predictable and to build rest into the rhythm instead of
-            burning out in one long stretch.
-          </p>
-        </section>
+            <section className="pomodoro-article__section" aria-labelledby="pomodoro-what-heading">
+              <h3 id="pomodoro-what-heading" className="pomodoro-article__h">
+                What it is
+              </h3>
+              <p className="pomodoro-article__p">
+                The Pomodoro Technique is a time-management method: you work in focused
+                intervals (classically 25 minutes), then take a short break before the next
+                round. After several focus rounds you take a longer break. The idea is to
+                make deep work predictable and to build rest into the rhythm instead of
+                burning out in one long stretch.
+              </p>
+            </section>
 
-        <section className="pomodoro-article__section" aria-labelledby="pomodoro-when-heading">
-          <h3 id="pomodoro-when-heading" className="pomodoro-article__h">
-            When it started
-          </h3>
-          <p className="pomodoro-article__p">
-            Francesco Cirillo developed the technique as a university student in the
-            late 1980s. He used a kitchen timer shaped like a tomato—
-            <span lang="it">pomodoro</span> in Italian—hence the name. It has since
-            been described in books and courses and is widely used in software,
-            studying, and creative work.
-          </p>
-        </section>
+            <section className="pomodoro-article__section" aria-labelledby="pomodoro-when-heading">
+              <h3 id="pomodoro-when-heading" className="pomodoro-article__h">
+                When it started
+              </h3>
+              <p className="pomodoro-article__p">
+                Francesco Cirillo developed the technique as a university student in the
+                late 1980s. He used a kitchen timer shaped like a tomato—
+                <span lang="it">pomodoro</span> in Italian—hence the name. It has since
+                been described in books and courses and is widely used in software,
+                studying, and creative work.
+              </p>
+            </section>
 
-        <section className="pomodoro-article__section" aria-labelledby="pomodoro-why-heading">
-          <h3 id="pomodoro-why-heading" className="pomodoro-article__h">
-            Why it works well
-          </h3>
-          <p className="pomodoro-article__p">
-            Short, bounded sessions reduce the anxiety of “finishing the whole
-            project” and make it easier to start. Breaks help sustain attention and
-            give your eyes and body a reset—especially valuable if you sit at a desk.
-            Many people also like the clear signal to ignore distractions until the
-            timer rings.
-          </p>
-        </section>
+            <section className="pomodoro-article__section" aria-labelledby="pomodoro-why-heading">
+              <h3 id="pomodoro-why-heading" className="pomodoro-article__h">
+                Why it works well
+              </h3>
+              <p className="pomodoro-article__p">
+                Short, bounded sessions reduce the anxiety of “finishing the whole
+                project” and make it easier to start. Breaks help sustain attention and
+                give your eyes and body a reset—especially valuable if you sit at a desk.
+                Many people also like the clear signal to ignore distractions until the
+                timer rings.
+              </p>
+            </section>
 
-        <section
-          className="pomodoro-article__sources"
-          aria-labelledby="pomodoro-sources-heading"
-        >
-          <h3 id="pomodoro-sources-heading" className="pomodoro-article__h">
-            Sources
-          </h3>
-          <ul className="pomodoro-article__source-list">
-            <li>
-              <a
-                href="https://francescocirillo.com/pages/pomodoro-technique"
-                className="pomodoro-article__link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Cirillo, Francesco — Pomodoro Technique (official overview)
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://en.wikipedia.org/wiki/Pomodoro_Technique"
-                className="pomodoro-article__link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Wikipedia — Pomodoro Technique
-              </a>
-            </li>
-          </ul>
-        </section>
-      </article>
+            <section
+              className="pomodoro-article__sources"
+              aria-labelledby="pomodoro-sources-heading"
+            >
+              <h3 id="pomodoro-sources-heading" className="pomodoro-article__h">
+                Sources
+              </h3>
+              <ul className="pomodoro-article__source-list">
+                <li>
+                  <a
+                    href="https://francescocirillo.com/pages/pomodoro-technique"
+                    className="pomodoro-article__link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Cirillo, Francesco — Pomodoro Technique (official overview)
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://en.wikipedia.org/wiki/Pomodoro_Technique"
+                    className="pomodoro-article__link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Wikipedia — Pomodoro Technique
+                  </a>
+                </li>
+              </ul>
+            </section>
+          </article>
+        </div>
+      </div>
     </div>
   )
 }
