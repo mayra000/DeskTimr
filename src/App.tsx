@@ -326,6 +326,11 @@ function App() {
           />
         </>
       )}
+      <p className="app-privacy-note">
+        No account — desk timer logs, goals, and Pomodoro tasks stay in this
+        browser only. Clearing site data or using private browsing can reset
+        them.
+      </p>
     </div>
   )
 }

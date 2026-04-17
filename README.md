@@ -74,6 +74,17 @@ This project is a **static Vite SPA**. Use **Node.js 20.19+** on the host.
 3. Set **Build Command** to `npm run build` and **Output Directory** to `dist` (Vite defaults are usually correct).
 4. Deploy. The included `vercel.json` rewrites routes to `index.html` for client-side routing if you add a router later.
 
+## Before launch
+
+**Bottom line:** Treat this as ready to launch from a feature standpoint; invest a short block in metadata, naming, one privacy line, and cross-browser checks instead of new functionality unless you have a specific audience demand (e.g. teams, accounts, sync).
+
+Quick checklist:
+
+- **Metadata** — `index.html` includes a default description and Open Graph / Twitter tags. After you know the production URL, set `og:url` and optionally `og:image` to your canonical link and share image.
+- **Naming** — Align repository name, `package.json` `name`, page `<title>`, and in-app branding (the product name is **DeskFocus**; rename consistently if you prefer another public name).
+- **Privacy** — A short on-device-only note is shown at the bottom of the app.
+- **Cross-browser** — Smoke-test Safari, Chrome, and Firefox (plus a phone); try private/incognito once to see behavior when `localStorage` is restricted.
+
 ---
 
 Built as a portfolio / open-source project.

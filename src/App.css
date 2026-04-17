@@ -34,6 +34,23 @@
   background: var(--dt-posture-fill-standing);
 }
 
+.app-privacy-note {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.75rem max(var(--dt-page-gutter), env(safe-area-inset-right, 0px))
+    calc(0.75rem + env(safe-area-inset-bottom, 0px))
+    max(var(--dt-page-gutter), env(safe-area-inset-left, 0px));
+  position: relative;
+  z-index: 2;
+  max-width: 70ch;
+  font-size: clamp(0.65rem, 1.35vw, 0.72rem);
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--dt-text-muted);
+}
+
 .app[data-app-mode='pomodoro'] {
   overflow-x: clip;
 }
