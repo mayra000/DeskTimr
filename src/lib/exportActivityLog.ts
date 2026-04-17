@@ -3,7 +3,7 @@ import { formatDurationShort } from './time'
 
 export type ActivityLogExportPayload = {
   exportedAt: string
-  app: 'DeskTimr'
+  app: 'DeskFocus'
   today: { dayKey: string; sittingMs: number; standingMs: number }
   week: WeekDayRow[]
   weekTotals: { sittingMs: number; standingMs: number }
@@ -26,7 +26,7 @@ export function buildActivityLogExport(
 ): ActivityLogExportPayload {
   return {
     exportedAt: new Date().toISOString(),
-    app: 'DeskTimr',
+    app: 'DeskFocus',
     today: {
       dayKey: todayKey,
       sittingMs: today.sittingMs,
@@ -41,7 +41,7 @@ export function exportActivityLogJson(payload: ActivityLogExportPayload) {
   const blob = new Blob([JSON.stringify(payload, null, 2)], {
     type: 'application/json;charset=utf-8',
   })
-  triggerDownload(blob, `desktimr-log-${payload.today.dayKey}.json`)
+    triggerDownload(blob, `deskfocus-log-${payload.today.dayKey}.json`)
 }
 
 export async function exportActivityLogExcel(payload: ActivityLogExportPayload) {
@@ -102,5 +102,5 @@ export async function exportActivityLogExcel(payload: ActivityLogExportPayload) 
   const blob = new Blob([wbout], {
     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   })
-  triggerDownload(blob, `desktimr-log-${payload.today.dayKey}.xlsx`)
+  triggerDownload(blob, `deskfocus-log-${payload.today.dayKey}.xlsx`)
 }

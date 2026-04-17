@@ -46,7 +46,7 @@ import './App.css'
 
 const storage = createLocalStorageAdapter()
 
-const APP_MODE_KEY = 'desktimr-app-mode'
+const APP_MODE_KEY = 'deskfocus-app-mode'
 
 function loadAppMode(): AppMode {
   try {

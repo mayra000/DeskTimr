@@ -1,4 +1,4 @@
-# DeskTimr
+# DeskFocus
 
 A browser-based productivity app that combines **desk posture tracking** (sitting vs. standing) with a **Pomodoro timer** and task list. Switch between the two experiences from the header; your choice is remembered for the next visit.
 
