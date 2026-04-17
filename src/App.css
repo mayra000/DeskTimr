@@ -360,13 +360,13 @@
 }
 
 .desk-timer__posture-strip[data-posture='sitting'] {
-  border-color: rgba(147, 197, 255, 0.45);
-  box-shadow: 0 0 0 1px rgba(147, 197, 255, 0.12);
+  border-color: color-mix(in srgb, var(--dt-desk-ring-sitting) 55%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--dt-desk-ring-sitting) 18%, transparent);
 }
 
 .desk-timer__posture-strip[data-posture='standing'] {
-  border-color: rgba(180, 255, 200, 0.4);
-  box-shadow: 0 0 0 1px rgba(180, 255, 200, 0.1);
+  border-color: color-mix(in srgb, var(--dt-desk-ring-standing) 52%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--dt-desk-ring-standing) 16%, transparent);
 }
 
 .desk-timer__card {
@@ -710,12 +710,8 @@
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 50%;
-  background: rgba(244, 247, 244, 0.4);
-  color: #1a2f23;
-}
-
-html[data-posture='sitting'] .standing-badges__complete {
-  color: #18122a;
+  background: color-mix(in srgb, var(--dt-text) 42%, transparent);
+  color: var(--dt-desk-cta-text);
 }
 
 .standing-badges__check {
@@ -983,11 +979,11 @@ html[data-posture='sitting'] .standing-badges__complete {
 }
 
 .activity-log {
-  --al-text: #1a1a1a;
-  --al-muted: #5c5c5c;
-  --al-border: rgba(0, 0, 0, 0.1);
-  --al-surface: #f0efe9;
-  --al-surface-raised: #e8e6df;
+  --al-text: var(--dt-ink-heading);
+  --al-muted: var(--dt-ink-muted);
+  --al-border: var(--dt-ink-border);
+  --al-surface: var(--dt-paper);
+  --al-surface-raised: var(--dt-paper-raised);
   width: 100%;
   max-width: none;
   margin: 0;
@@ -1047,9 +1043,9 @@ html[data-posture='sitting'] .standing-badges__complete {
 }
 
 .activity-log__export-btn:hover {
-  background: #ddd9cf;
+  background: var(--dt-paper-hover);
   color: var(--al-text);
-  border-color: rgba(0, 0, 0, 0.18);
+  border-color: color-mix(in srgb, var(--dt-ink-heading) 22%, transparent);
 }
 
 .activity-log__export-btn:active {
@@ -1097,7 +1093,7 @@ html[data-posture='sitting'] .standing-badges__complete {
   overflow-x: auto;
   border: 1px solid var(--al-border);
   border-radius: 0.35rem;
-  background: #f7f6f1;
+  background: var(--dt-paper-table);
 }
 
 .activity-log__table {
@@ -1123,7 +1119,7 @@ html[data-posture='sitting'] .standing-badges__complete {
 
 .activity-log__table td {
   color: var(--al-text);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid color-mix(in srgb, var(--dt-ink-heading) 8%, transparent);
 }
 
 .activity-log__table tbody tr:last-child td {
@@ -1131,7 +1127,7 @@ html[data-posture='sitting'] .standing-badges__complete {
 }
 
 .activity-log__table--week tbody tr[data-today='true'] td {
-  background: rgba(0, 0, 0, 0.04);
+  background: color-mix(in srgb, var(--dt-pomo-focus) 7%, var(--dt-paper-table) 93%);
 }
 
 .activity-log__table tfoot td,
@@ -1226,8 +1222,8 @@ html[data-posture='sitting'] .standing-badges__complete {
   padding: 0.85rem 1rem;
   border: none;
   border-radius: 0.35rem;
-  background: #fff;
-  color: var(--dt-pomodoro-accent, #ba4949);
+  background: var(--dt-paper);
+  color: var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent));
   font-family: inherit;
   font-size: clamp(0.85rem, 2.2vw, 1rem);
   font-weight: 700;
@@ -1445,7 +1441,7 @@ html[data-posture='sitting'] .standing-badges__complete {
   padding: calc(2.25rem + clamp(1.75rem, 4vw, 2.75rem)) 0
     clamp(2.5rem, 5vw, 3.5rem);
   box-sizing: border-box;
-  background: #fff;
+  background: var(--dt-paper);
   color-scheme: light;
 }
 
@@ -1461,7 +1457,7 @@ html[data-posture='sitting'] .standing-badges__complete {
   margin: 0;
   padding: 0;
   border: none;
-  color: #3a342e;
+  color: var(--dt-ink);
 }
 
 .pomodoro-article__title {
@@ -1469,7 +1465,7 @@ html[data-posture='sitting'] .standing-badges__complete {
   font-size: clamp(1.05rem, 2.7vw, 1.35rem);
   font-weight: 700;
   letter-spacing: 0.03em;
-  color: #1e1a17;
+  color: var(--dt-ink-heading);
   line-height: 1.3;
 }
 
@@ -1486,7 +1482,7 @@ html[data-posture='sitting'] .standing-badges__complete {
   font-size: clamp(0.8rem, 2.1vw, 0.95rem);
   font-weight: 700;
   letter-spacing: 0.03em;
-  color: #25211e;
+  color: var(--dt-ink-heading);
 }
 
 .pomodoro-article__p {
@@ -1494,13 +1490,13 @@ html[data-posture='sitting'] .standing-badges__complete {
   font-size: clamp(0.82rem, 2vw, 0.95rem);
   font-weight: 400;
   line-height: 1.65;
-  color: #4a433c;
+  color: var(--dt-ink-subtle);
 }
 
 .pomodoro-article__sources {
   margin-top: 1.75rem;
   padding-top: 1.25rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid var(--dt-ink-border);
 }
 
 .pomodoro-article__source-list {
@@ -1508,23 +1504,27 @@ html[data-posture='sitting'] .standing-badges__complete {
   padding-left: 1.15rem;
   font-size: clamp(0.75rem, 1.9vw, 0.85rem);
   line-height: 1.7;
-  color: #5c534c;
+  color: var(--dt-ink-muted);
 }
 
 .pomodoro-article__link {
-  color: var(--dt-pomodoro-accent, #9a2d2d);
+  color: var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent));
   text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--dt-pomodoro-accent, #9a2d2d) 45%, transparent);
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent)) 45%,
+    transparent
+  );
   text-underline-offset: 0.15em;
 }
 
 .pomodoro-article__link:hover {
-  color: #7a2424;
-  text-decoration-color: var(--dt-pomodoro-accent, #9a2d2d);
+  color: color-mix(in srgb, var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent)) 78%, #000 22%);
+  text-decoration-color: var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent));
 }
 
 .pomodoro-article__link:focus-visible {
-  outline: 2px solid var(--dt-pomodoro-accent, #9a2d2d);
+  outline: 2px solid var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent));
   outline-offset: 2px;
   border-radius: 0.15rem;
 }

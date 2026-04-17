@@ -3,19 +3,46 @@
 :root {
   /* Horizontal inset for header, main, footer, activity log — use with max(..., safe-area-inset-*) */
   --dt-page-gutter: clamp(1rem, 4vw, 2.5rem);
-  --dt-bg-standing: #1a2f23;
-  --dt-bg-sitting: #18122a;
-  --dt-posture-fill-sitting: rgba(88, 52, 118, 0.52);
-  --dt-posture-fill-standing: rgba(72, 118, 92, 0.48);
-  --dt-text: #f4f7f4;
-  --dt-text-muted: rgba(244, 247, 244, 0.72);
+
+  /* Pomodoro palette (canonical — desk + light surfaces derive from these) */
+  --dt-pomo-focus: #ba4949;
+  --dt-pomo-focus-accent: #9a2d2d;
+  --dt-pomo-short: #3d7d72;
+  --dt-pomo-short-accent: #2a5c54;
+  --dt-pomo-long: #396f9a;
+  --dt-pomo-long-accent: #2a5580;
+
+  /* Desk timer: sitting ↔ long-break blue, standing ↔ short-break teal */
+  --dt-bg-sitting: color-mix(in srgb, var(--dt-pomo-long) 34%, #0b0f12 66%);
+  --dt-bg-standing: color-mix(in srgb, var(--dt-pomo-short) 32%, #0b0f12 68%);
+  --dt-posture-fill-sitting: color-mix(in srgb, var(--dt-pomo-long) 55%, transparent);
+  --dt-posture-fill-standing: color-mix(in srgb, var(--dt-pomo-short) 52%, transparent);
+  --dt-desk-cta-sitting: color-mix(in srgb, var(--dt-pomo-long) 28%, #050708 72%);
+  --dt-desk-cta-standing: color-mix(in srgb, var(--dt-pomo-short) 28%, #050708 72%);
+
+  --dt-desk-ring-sitting: color-mix(in srgb, var(--dt-pomo-long) 72%, #ffffff 28%);
+  --dt-desk-ring-standing: color-mix(in srgb, var(--dt-pomo-short) 72%, #ffffff 28%);
+
+  /* Shared light UI (article band, activity log) — warm paper harmonized with focus red */
+  --dt-paper: color-mix(in srgb, var(--dt-pomo-focus) 4.5%, #faf8f5 95.5%);
+  --dt-paper-raised: color-mix(in srgb, var(--dt-pomo-focus) 6%, #f0ebe6 94%);
+  --dt-paper-table: color-mix(in srgb, var(--dt-pomo-focus) 3%, #f7f4f0 97%);
+  --dt-paper-hover: color-mix(in srgb, var(--dt-pomo-focus) 10%, #e8e2dc 90%);
+  --dt-ink: #2a2520;
+  --dt-ink-heading: #1c1916;
+  --dt-ink-subtle: #4a433c;
+  --dt-ink-muted: #5c534c;
+  --dt-ink-border: color-mix(in srgb, var(--dt-pomo-focus) 14%, #d5cdc5 86%);
+
+  --dt-text: #f8f6f4;
+  --dt-text-muted: rgba(248, 246, 244, 0.76);
   --dt-font: 'Outfit', system-ui, sans-serif;
   color-scheme: dark;
 }
 
 html {
   --dt-bg: var(--dt-bg-sitting);
-  --dt-desk-cta-text: #2a1a3a;
+  --dt-desk-cta-text: var(--dt-desk-cta-sitting);
   min-height: 100%;
   min-height: 100dvh;
   background: var(--dt-bg);
@@ -23,34 +50,34 @@ html {
 
 html[data-posture='standing'] {
   --dt-bg: var(--dt-bg-standing);
-  --dt-desk-cta-text: #123a24;
+  --dt-desk-cta-text: var(--dt-desk-cta-standing);
 }
 
 html[data-posture='sitting'] {
   --dt-bg: var(--dt-bg-sitting);
-  --dt-desk-cta-text: #2a1a3a;
+  --dt-desk-cta-text: var(--dt-desk-cta-sitting);
 }
 
 /* Pomodoro app: fallback until data-pomodoro-phase is set by PomodoroView */
 html[data-app-mode='pomodoro'] {
-  --dt-bg: #ba4949;
-  --dt-pomodoro-accent: #9a2d2d;
+  --dt-bg: var(--dt-pomo-focus);
+  --dt-pomodoro-accent: var(--dt-pomo-focus-accent);
   --dt-text-muted: rgba(255, 255, 255, 0.78);
 }
 
 html[data-app-mode='pomodoro'][data-pomodoro-phase='pomodoro'] {
-  --dt-bg: #ba4949;
-  --dt-pomodoro-accent: #9a2d2d;
+  --dt-bg: var(--dt-pomo-focus);
+  --dt-pomodoro-accent: var(--dt-pomo-focus-accent);
 }
 
 html[data-app-mode='pomodoro'][data-pomodoro-phase='shortBreak'] {
-  --dt-bg: #3d7d72;
-  --dt-pomodoro-accent: #2a5c54;
+  --dt-bg: var(--dt-pomo-short);
+  --dt-pomodoro-accent: var(--dt-pomo-short-accent);
 }
 
 html[data-app-mode='pomodoro'][data-pomodoro-phase='longBreak'] {
-  --dt-bg: #396f9a;
-  --dt-pomodoro-accent: #2a5580;
+  --dt-bg: var(--dt-pomo-long);
+  --dt-pomodoro-accent: var(--dt-pomo-long-accent);
 }
 
 *,
