@@ -42,6 +42,7 @@ import { FactCarousel } from './components/FactCarousel'
 import { WeeklySummary } from './components/WeeklySummary'
 import { StandingGoalControl } from './components/StandingGoalControl'
 import { StandingWeekBadges } from './components/StandingWeekBadges'
+import { DeskPostureStrip } from './components/DeskPostureStrip'
 import './App.css'
 
 const storage = createLocalStorageAdapter()
@@ -258,6 +259,7 @@ function App() {
             <div className="app__main app__main--desk">
               <div className="desk-timer">
                 <div className="desk-timer__card">
+                  <DeskPostureStrip posture={state.posture} />
                   <MainTimer
                     label={mainTimerLabel}
                     sessionDisplayMode={state.sessionDisplayMode}
@@ -275,7 +277,10 @@ function App() {
                     onClear={clearSession}
                     onToggleDisplayMode={toggleSessionDisplayMode}
                   />
-                  <PostureToggle label={toggleLabel} onClick={switchPosture} />
+                  <PostureToggle
+                    label={toggleLabel}
+                    onClick={switchPosture}
+                  />
                 </div>
               </div>
             </div>
