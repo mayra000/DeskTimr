@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap');
 
 :root {
+  /* Horizontal inset for header, main, footer, activity log — use with max(..., safe-area-inset-*) */
+  --dt-page-gutter: clamp(1rem, 4vw, 2.5rem);
   --dt-bg-standing: #1a2f23;
   --dt-bg-sitting: #18122a;
   --dt-posture-fill-sitting: rgba(88, 52, 118, 0.52);

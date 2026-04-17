@@ -282,20 +282,24 @@ function App() {
                     onClick={switchPosture}
                   />
                 </div>
+                <div className="desk-timer__below">
+                  <div className="desk-timer__rings">
+                    <StandingWeekBadges
+                      days={gamificationSnapshot.workweekStandingBadges}
+                    />
+                  </div>
+                  <div className="desk-timer__goal">
+                    <StandingGoalControl
+                      goalMs={standingGoalMs}
+                      onAdjust={adjustStandingGoalMs}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
             <footer className="app-footer app-footer--desk">
               <div className="app-footer__left">
-                <div className="footer-standing">
-                  <StandingWeekBadges
-                    days={gamificationSnapshot.workweekStandingBadges}
-                  />
-                  <StandingGoalControl
-                    goalMs={standingGoalMs}
-                    onAdjust={adjustStandingGoalMs}
-                  />
-                </div>
                 <FactCarousel
                   fact={fact}
                   onPrev={factPrev}
