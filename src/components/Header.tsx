@@ -11,7 +11,7 @@ export function Header({ appMode, onAppModeChange }: Props) {
   return (
     <header className="app-header">
       <div className="app-logo" aria-hidden="true">
-        DeskTimr
+        DeskFocus
       </div>
       <nav className="app-header__mode" aria-label="View">
         {appMode === 'desk' ? (

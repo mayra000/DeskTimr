@@ -57,12 +57,12 @@ export function notifySittingHourComplete(hour: number): void {
   if (Notification.permission !== 'granted') return
   const hint = pickStretchHint(hour)
   try {
-    new Notification('DeskTimr — time for a break', {
+    new Notification('DeskFocus — time for a break', {
       body:
         hour === 1
           ? `You've been sitting for an hour. Switch to standing or take a quick stretch. ${hint}`
           : `You've been sitting for ${hour} hours. Take a standing break or do some stretches. ${hint}`,
-      tag: 'desktimr-sitting-hour',
+      tag: 'deskfocus-sitting-hour',
       requireInteraction: false,
     })
   } catch {

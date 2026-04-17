@@ -42,11 +42,12 @@ import { FactCarousel } from './components/FactCarousel'
 import { WeeklySummary } from './components/WeeklySummary'
 import { StandingGoalControl } from './components/StandingGoalControl'
 import { StandingWeekBadges } from './components/StandingWeekBadges'
+import { DeskPostureStrip } from './components/DeskPostureStrip'
 import './App.css'
 
 const storage = createLocalStorageAdapter()
 
-const APP_MODE_KEY = 'desktimr-app-mode'
+const APP_MODE_KEY = 'deskfocus-app-mode'
 
 function loadAppMode(): AppMode {
   try {
@@ -254,41 +255,51 @@ function App() {
         </div>
       ) : (
         <>
-          <div className="app__stage">
-            <div className="app__main">
-              <div className="app__main-content">
-                <MainTimer
-                  label={mainTimerLabel}
-                  sessionDisplayMode={state.sessionDisplayMode}
-                  elapsedMs={sessionElapsedMs}
-                  countdownDurationMs={state.countdownDurationMs}
-                  running={state.running}
-                  onSetCountdownDurationMs={setCountdownDurationMs}
-                />
-                <TimerControls
-                  running={state.running}
-                  canClear={!state.running && sessionElapsedMs > 0}
-                  sessionDisplayMode={state.sessionDisplayMode}
-                  onPlay={playWithNotificationOptIn}
-                  onPause={pause}
-                  onClear={clearSession}
-                  onToggleDisplayMode={toggleSessionDisplayMode}
-                />
-                <PostureToggle label={toggleLabel} onClick={switchPosture} />
+          <div className="app__stage app__stage--desk">
+            <div className="app__main app__main--desk">
+              <div className="desk-timer">
+                <div className="desk-timer__card">
+                  <DeskPostureStrip posture={state.posture} />
+                  <MainTimer
+                    label={mainTimerLabel}
+                    sessionDisplayMode={state.sessionDisplayMode}
+                    elapsedMs={sessionElapsedMs}
+                    countdownDurationMs={state.countdownDurationMs}
+                    running={state.running}
+                    onSetCountdownDurationMs={setCountdownDurationMs}
+                  />
+                  <TimerControls
+                    running={state.running}
+                    canClear={!state.running && sessionElapsedMs > 0}
+                    sessionDisplayMode={state.sessionDisplayMode}
+                    onPlay={playWithNotificationOptIn}
+                    onPause={pause}
+                    onClear={clearSession}
+                    onToggleDisplayMode={toggleSessionDisplayMode}
+                  />
+                  <PostureToggle
+                    label={toggleLabel}
+                    onClick={switchPosture}
+                  />
+                </div>
+                <div className="desk-timer__below">
+                  <div className="desk-timer__rings">
+                    <StandingWeekBadges
+                      days={gamificationSnapshot.workweekStandingBadges}
+                    />
+                  </div>
+                  <div className="desk-timer__goal">
+                    <StandingGoalControl
+                      goalMs={standingGoalMs}
+                      onAdjust={adjustStandingGoalMs}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
-            <footer className="app-footer">
+            <footer className="app-footer app-footer--desk">
               <div className="app-footer__left">
-                <div className="footer-standing">
-                  <StandingWeekBadges
-                    days={gamificationSnapshot.workweekStandingBadges}
-                  />
-                  <StandingGoalControl
-                    goalMs={standingGoalMs}
-                    onAdjust={adjustStandingGoalMs}
-                  />
-                </div>
                 <FactCarousel
                   fact={fact}
                   onPrev={factPrev}
@@ -315,6 +326,11 @@ function App() {
           />
         </>
       )}
+      <p className="app-privacy-note">
+        No account — desk timer logs, goals, and Pomodoro tasks stay in this
+        browser only. Clearing site data or using private browsing can reset
+        them.
+      </p>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-const STORAGE_KEY = 'desktimr-pomodoro-tasks'
+const STORAGE_KEY = 'deskfocus-pomodoro-tasks'
 
 export const POMODORO_MS = 25 * 60 * 1000
 export const SHORT_BREAK_MS = 5 * 60 * 1000

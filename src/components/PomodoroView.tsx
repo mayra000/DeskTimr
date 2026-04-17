@@ -1,8 +1,26 @@
-import { useCallback, useEffect, useState, type KeyboardEvent } from 'react'
+import confetti from 'canvas-confetti'
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import {
   type PomodoroPhase,
   usePomodoro,
 } from '../hooks/usePomodoro'
+
+function firePomodoroConfetti() {
+  const count = 200
+  const defaults = { origin: { y: 0.7 } }
+  function fire(particleRatio: number, opts: confetti.Options) {
+    void confetti({
+      ...defaults,
+      ...opts,
+      particleCount: Math.floor(count * particleRatio),
+    })
+  }
+  fire(0.25, { spread: 26, startVelocity: 55 })
+  fire(0.2, { spread: 60 })
+  fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 })
+  fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 })
+  fire(0.1, { spread: 120, startVelocity: 45 })
+}
 
 function formatClock(ms: number): string {
   const totalSec = Math.max(0, Math.floor(ms / 1000))
@@ -21,6 +39,7 @@ export function PomodoroView() {
   const {
     phase,
     remainingMs,
+    pomodorosCompleted,
     tasks,
     activeTask,
     activeTaskId,
@@ -36,6 +55,14 @@ export function PomodoroView() {
   } = usePomodoro()
 
   const [draft, setDraft] = useState('')
+  const prevPomodorosCompleted = useRef(pomodorosCompleted)
+
+  useEffect(() => {
+    if (pomodorosCompleted > prevPomodorosCompleted.current) {
+      firePomodoroConfetti()
+    }
+    prevPomodorosCompleted.current = pomodorosCompleted
+  }, [pomodorosCompleted])
 
   useEffect(() => {
     document.documentElement.dataset.pomodoroPhase = phase
@@ -60,116 +87,193 @@ export function PomodoroView() {
   )
 
   return (
-    <div className="pomodoro" data-pomodoro-phase={phase}>
-      <div className="pomodoro__card">
-        <div className="pomodoro__tabs" role="tablist" aria-label="Timer mode">
-          {TABS.map(({ phase: p, label }) => (
-            <button
-              key={p}
-              type="button"
-              role="tab"
-              aria-selected={phase === p}
-              className={
-                phase === p
-                  ? 'pomodoro__tab pomodoro__tab--active'
-                  : 'pomodoro__tab'
-              }
-              onClick={() => setPhaseTab(p)}
-            >
-              {label}
-            </button>
-          ))}
+    <>
+      <div className="pomodoro" data-pomodoro-phase={phase}>
+      <div className="pomodoro__above-fold">
+        <div className="pomodoro__card">
+          <div className="pomodoro__tabs" role="tablist" aria-label="Timer mode">
+            {TABS.map(({ phase: p, label }) => (
+              <button
+                key={p}
+                type="button"
+                role="tab"
+                aria-selected={phase === p}
+                className={
+                  phase === p
+                    ? 'pomodoro__tab pomodoro__tab--active'
+                    : 'pomodoro__tab'
+                }
+                onClick={() => setPhaseTab(p)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div
+            className="pomodoro__timer"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {formatClock(remainingMs)}
+          </div>
+
+          <button
+            type="button"
+            className="pomodoro__start"
+            onClick={toggleRunning}
+          >
+            {startLabel}
+          </button>
         </div>
 
-        <div
-          className="pomodoro__timer"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          {formatClock(remainingMs)}
+        <div className="pomodoro__status">
+          {focusSessionLabel != null && (
+            <span className="pomodoro__session-id">{focusSessionLabel}</span>
+          )}
+          <span className="pomodoro__status-text">{statusLine}</span>
+          {activeTask && !activeTask.done && phase === 'pomodoro' && (
+            <span className="pomodoro__current-task">{activeTask.title}</span>
+          )}
         </div>
 
-        <button
-          type="button"
-          className="pomodoro__start"
-          onClick={toggleRunning}
-        >
-          {startLabel}
-        </button>
+        <section className="pomodoro__tasks" aria-label="Tasks">
+          <div className="pomodoro__tasks-head">
+            <h2 className="pomodoro__tasks-title">Tasks</h2>
+          </div>
+          <ul className="pomodoro__task-list">
+            {tasks.map((t) => (
+              <li
+                key={t.id}
+                className={
+                  activeTaskId === t.id
+                    ? 'pomodoro__task-row pomodoro__task-row--active'
+                    : 'pomodoro__task-row'
+                }
+              >
+                <button
+                  type="button"
+                  className={
+                    t.done
+                      ? 'pomodoro__task-check pomodoro__task-check--done'
+                      : 'pomodoro__task-check'
+                  }
+                  aria-label={t.done ? 'Mark not done' : 'Mark done'}
+                  onClick={() => toggleTaskDone(t.id)}
+                />
+                <button
+                  type="button"
+                  className={
+                    t.done
+                      ? 'pomodoro__task-title pomodoro__task-title--done'
+                      : 'pomodoro__task-title'
+                  }
+                  onClick={() => selectActiveTask(t.id)}
+                >
+                  {t.title}
+                </button>
+                <button
+                  type="button"
+                  className="pomodoro__task-remove"
+                  aria-label={`Remove ${t.title}`}
+                  onClick={() => removeTask(t.id)}
+                >
+                  ×
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <div className="pomodoro__add-dashed">
+            <span className="pomodoro__add-plus" aria-hidden="true">
+              +
+            </span>
+            <input
+              className="pomodoro__add-input"
+              placeholder="Add Task"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={onKeyDown}
+              maxLength={200}
+              aria-label="Add task"
+            />
+          </div>
+        </section>
+      </div>
       </div>
 
-      <div className="pomodoro__status">
-        {focusSessionLabel != null && (
-          <span className="pomodoro__session-id">{focusSessionLabel}</span>
-        )}
-        <span className="pomodoro__status-text">{statusLine}</span>
-        {activeTask && !activeTask.done && phase === 'pomodoro' && (
-          <span className="pomodoro__current-task">{activeTask.title}</span>
-        )}
-      </div>
+      <div className="pomodoro-article-surface">
+        <div className="pomodoro-article-inner">
+          <article
+            className="pomodoro-article"
+            aria-labelledby="pomodoro-article-heading"
+          >
+            <h2 id="pomodoro-article-heading" className="pomodoro-article__title">
+              The Pomodoro Technique
+            </h2>
 
-      <section className="pomodoro__tasks" aria-label="Tasks">
-        <div className="pomodoro__tasks-head">
-          <h2 className="pomodoro__tasks-title">Tasks</h2>
-        </div>
-        <ul className="pomodoro__task-list">
-          {tasks.map((t) => (
-            <li
-              key={t.id}
-              className={
-                activeTaskId === t.id
-                  ? 'pomodoro__task-row pomodoro__task-row--active'
-                  : 'pomodoro__task-row'
-              }
+            <section className="pomodoro-article__section" aria-labelledby="pomodoro-what-heading">
+              <h3 id="pomodoro-what-heading" className="pomodoro-article__h">
+                What it is
+              </h3>
+              <p className="pomodoro-article__p">
+                The Pomodoro Technique is a time-management method: you work in focused
+                intervals (classically 25 minutes), then take a short break before the next
+                round. After several focus rounds you take a longer break. The idea is to
+                make deep work predictable and to build rest into the rhythm instead of
+                burning out in one long stretch.
+              </p>
+            </section>
+
+            <section className="pomodoro-article__section" aria-labelledby="pomodoro-when-heading">
+              <h3 id="pomodoro-when-heading" className="pomodoro-article__h">
+                When it started
+              </h3>
+              <p className="pomodoro-article__p">
+                Francesco Cirillo developed the technique as a university student in the
+                late 1980s. He used a kitchen timer shaped like a tomato—
+                <span lang="it">pomodoro</span> in Italian—hence the name. It has since
+                been described in books and courses and is widely used in software,
+                studying, and creative work.
+              </p>
+            </section>
+
+            <section className="pomodoro-article__section" aria-labelledby="pomodoro-why-heading">
+              <h3 id="pomodoro-why-heading" className="pomodoro-article__h">
+                Why it works well
+              </h3>
+              <p className="pomodoro-article__p">
+                Short, bounded sessions reduce the anxiety of “finishing the whole
+                project” and make it easier to start. Breaks help sustain attention and
+                give your eyes and body a reset—especially valuable if you sit at a desk.
+                Many people also like the clear signal to ignore distractions until the
+                timer rings.
+              </p>
+            </section>
+
+            <section
+              className="pomodoro-article__sources"
+              aria-labelledby="pomodoro-sources-heading"
             >
-              <button
-                type="button"
-                className={
-                  t.done
-                    ? 'pomodoro__task-check pomodoro__task-check--done'
-                    : 'pomodoro__task-check'
-                }
-                aria-label={t.done ? 'Mark not done' : 'Mark done'}
-                onClick={() => toggleTaskDone(t.id)}
-              />
-              <button
-                type="button"
-                className={
-                  t.done
-                    ? 'pomodoro__task-title pomodoro__task-title--done'
-                    : 'pomodoro__task-title'
-                }
-                onClick={() => selectActiveTask(t.id)}
-              >
-                {t.title}
-              </button>
-              <button
-                type="button"
-                className="pomodoro__task-remove"
-                aria-label={`Remove ${t.title}`}
-                onClick={() => removeTask(t.id)}
-              >
-                ×
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        <div className="pomodoro__add-dashed">
-          <span className="pomodoro__add-plus" aria-hidden="true">
-            +
-          </span>
-          <input
-            className="pomodoro__add-input"
-            placeholder="Add Task"
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={onKeyDown}
-            maxLength={200}
-            aria-label="Add task"
-          />
+              <h3 id="pomodoro-sources-heading" className="pomodoro-article__h">
+                Sources
+              </h3>
+              <ul className="pomodoro-article__source-list">
+                <li>
+                  <a
+                    href="https://francescocirillo.com/pages/pomodoro-technique"
+                    className="pomodoro-article__link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Cirillo, Francesco — Pomodoro Technique (official overview)
+                  </a>
+                </li>
+              </ul>
+            </section>
+          </article>
         </div>
-      </section>
-    </div>
+      </div>
+    </>
   )
 }

@@ -56,8 +56,8 @@ export function notifyPostureReminder(
   if (Notification.permission !== 'granted') return
   const title =
     posture === 'sitting'
-      ? 'DeskTimr — sitting reminder'
-      : 'DeskTimr — standing reminder'
+      ? 'DeskFocus — sitting reminder'
+      : 'DeskFocus — standing reminder'
   const body =
     posture === 'sitting'
       ? kind === 'countdown'
@@ -69,7 +69,7 @@ export function notifyPostureReminder(
   try {
     new Notification(title, {
       body,
-      tag: `desktimr-posture-${posture}-${kind}`,
+      tag: `deskfocus-posture-${posture}-${kind}`,
       requireInteraction: false,
     })
   } catch {

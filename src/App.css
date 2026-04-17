@@ -2,8 +2,10 @@
   position: relative;
   z-index: 0;
   min-height: 100svh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  --app-header-height: clamp(4rem, 1.5rem + 2.5vw, 5.25rem);
   color: var(--dt-text);
   font-family: var(--dt-font);
   text-transform: uppercase;
@@ -32,6 +34,27 @@
   background: var(--dt-posture-fill-standing);
 }
 
+.app-privacy-note {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.75rem max(var(--dt-page-gutter), env(safe-area-inset-right, 0px))
+    calc(0.75rem + env(safe-area-inset-bottom, 0px))
+    max(var(--dt-page-gutter), env(safe-area-inset-left, 0px));
+  position: relative;
+  z-index: 2;
+  max-width: 70ch;
+  font-size: clamp(0.65rem, 1.35vw, 0.72rem);
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--dt-text-muted);
+}
+
+.app[data-app-mode='pomodoro'] {
+  overflow-x: clip;
+}
+
 .app[data-app-mode='pomodoro'] .app__posture-fill {
   opacity: 0;
 }
@@ -46,7 +69,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem clamp(1rem, 4vw, 2.5rem);
+  padding: 1.25rem max(var(--dt-page-gutter), env(safe-area-inset-right, 0px)) 1.25rem
+    max(var(--dt-page-gutter), env(safe-area-inset-left, 0px));
   position: relative;
   z-index: 2;
 }
@@ -140,17 +164,21 @@
   flex: 1;
   display: grid;
   place-items: center;
-  padding: 0.5rem 1rem 2rem;
+  padding: 0.5rem max(var(--dt-page-gutter), env(safe-area-inset-right, 0px)) 2rem
+    max(var(--dt-page-gutter), env(safe-area-inset-left, 0px));
   min-height: min(68vh, 720px);
 }
 
-.app__main-content {
-  width: min(92vw, 560px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-  padding: clamp(1rem, 4vw, 2.5rem) 0;
+/* Timer block sits in the visual center of the posture area (not pinned to the top). */
+.app__main--desk {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  justify-content: center;
+  padding: clamp(0.5rem, 2vh, 1.25rem)
+    max(var(--dt-page-gutter), env(safe-area-inset-right, 0px)) clamp(0.75rem, 2vh, 1.5rem)
+    max(var(--dt-page-gutter), env(safe-area-inset-left, 0px));
 }
 
 .main-timer {
@@ -295,10 +323,137 @@
   -moz-appearance: textfield;
 }
 
+/* —— Desk timer (matches Pomodoro card layout) —— */
+.desk-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: min(92vw, 480px);
+  margin-inline: auto;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.desk-timer__below {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 1.25rem;
+  gap: 0.65rem;
+}
+
+.app__main--desk .desk-timer {
+  margin-top: 0;
+}
+
+.desk-timer__posture-strip {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0 auto 1rem;
+  padding: 0.5rem 1rem;
+  max-width: 100%;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.desk-timer__posture-strip-label {
+  font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.desk-timer__posture-strip-value {
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.desk-timer__posture-strip[data-posture='sitting'] {
+  border-color: color-mix(in srgb, var(--dt-desk-ring-sitting) 55%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--dt-desk-ring-sitting) 18%, transparent);
+}
+
+.desk-timer__posture-strip[data-posture='standing'] {
+  border-color: color-mix(in srgb, var(--dt-desk-ring-standing) 52%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--dt-desk-ring-standing) 16%, transparent);
+}
+
+.desk-timer__card {
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.35rem 1.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  padding: 24px 48px;
+}
+
+.desk-timer__card .main-timer__label {
+  margin: 0 auto 1rem;
+  max-width: 32ch;
+  text-align: center;
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.04em;
+}
+
+.desk-timer__card .main-timer__digit-row {
+  font-size: clamp(3rem, 12vw, 5rem);
+  letter-spacing: 0.02em;
+}
+
+.desk-timer__card .main-timer__part {
+  color: #fff;
+}
+
+.desk-timer__card .main-timer__sep {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.desk-timer__card .main-timer__unit-row {
+  font-size: clamp(0.5rem, 1.2vw, 0.65rem);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.06em;
+}
+
+.desk-timer__card .main-timer__caret {
+  background: rgba(0, 0, 0, 0.12);
+  color: #fff;
+}
+
+.desk-timer__card .main-timer__caret:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.desk-timer__card .main-timer__part--edit {
+  color: #fff;
+  border-bottom-color: rgba(255, 255, 255, 0.45);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.desk-timer__card .main-timer__part--edit:focus {
+  border-bottom-color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.desk-timer__card .main-timer__digit-row--edit .main-timer__part--edit {
+  font-size: clamp(2.75rem, 10vw, 4.5rem);
+}
+
 .timer-controls {
   display: flex;
   gap: 1.5rem;
   align-items: center;
+  justify-content: center;
+  margin-top: 1.25rem;
 }
 
 .timer-controls__btn {
@@ -338,6 +493,101 @@
 
 .timer-controls__icon {
   display: block;
+}
+
+.desk-timer__rings {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.desk-timer__rings .standing-badges {
+  justify-content: center;
+  width: 100%;
+  margin-top: 0;
+  padding: 0;
+}
+
+.desk-timer__goal {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.desk-timer__goal .standing-goal {
+  align-items: center;
+}
+
+.desk-timer__goal .standing-goal__row {
+  justify-content: center;
+}
+
+.desk-timer__posture {
+  display: block;
+  width: calc(100% - 2rem);
+  margin: 1rem auto 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 0.35rem;
+  background: rgba(0, 0, 0, 0.12);
+  color: rgba(255, 255, 255, 0.95);
+  font-family: inherit;
+  font-size: clamp(0.75rem, 2vw, 0.85rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.12s ease;
+}
+
+.desk-timer__posture:hover {
+  background: rgba(0, 0, 0, 0.18);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.desk-timer__posture:active {
+  transform: scale(0.99);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desk-timer__posture:active {
+    transform: none;
+  }
+}
+
+/**
+ * Desk: first viewport is only the posture-colored area (header + stage).
+ */
+.app[data-app-mode='desk'] .app__stage--desk {
+  flex: 1 0 auto;
+  min-height: calc(
+    100svh - var(--app-header-height) - env(safe-area-inset-bottom, 0px) +
+      0.75rem
+  );
+  display: flex;
+  flex-direction: column;
+}
+
+@supports (height: 100dvh) {
+  .app[data-app-mode='desk'] .app__stage--desk {
+    min-height: calc(
+      100dvh - var(--app-header-height) - env(safe-area-inset-bottom, 0px) +
+        0.75rem
+    );
+  }
+}
+
+.app__stage--desk .app-footer--desk {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.app-footer--desk {
+  padding-top: 1.75rem;
+  box-sizing: border-box;
 }
 
 .standing-goal {
@@ -443,13 +693,6 @@
   padding: 0.35rem 0 0;
 }
 
-.footer-standing .standing-badges {
-  justify-content: flex-start;
-  width: auto;
-  margin-top: 0;
-  padding: 0;
-}
-
 .standing-badges__day {
   display: flex;
   flex-direction: column;
@@ -484,12 +727,8 @@
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 50%;
-  background: rgba(244, 247, 244, 0.4);
-  color: #1a2f23;
-}
-
-html[data-posture='sitting'] .standing-badges__complete {
-  color: #18122a;
+  background: color-mix(in srgb, var(--dt-text) 42%, transparent);
+  color: var(--dt-desk-cta-text);
 }
 
 .standing-badges__check {
@@ -503,40 +742,32 @@ html[data-posture='sitting'] .standing-badges__complete {
   color: var(--dt-text-muted);
 }
 
-.posture-toggle {
-  margin-top: 0.25rem;
-  width: 100%;
-  max-width: 420px;
-  padding: 0.95rem 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 0.35rem;
-  background: rgba(0, 0, 0, 0.12);
-  color: var(--dt-text-muted);
-  font-family: inherit;
-  font-size: clamp(0.7rem, 1.8vw, 0.85rem);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition:
-    background 0.15s ease,
-    color 0.15s ease;
-}
-
-.posture-toggle:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--dt-text);
-}
-
 .app-footer {
   flex-shrink: 0;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 1.5rem 2rem;
   align-items: end;
-  padding: 1.25rem clamp(1rem, 4vw, 2.5rem)
-    calc(64px + env(safe-area-inset-bottom, 0px));
+  padding: 1.25rem max(var(--dt-page-gutter), env(safe-area-inset-right, 0px))
+    calc(64px + env(safe-area-inset-bottom, 0px))
+    max(var(--dt-page-gutter), env(safe-area-inset-left, 0px));
   position: relative;
   z-index: 2;
+}
+
+.app-footer.app-footer--desk {
+  max-width: none;
+  margin-inline: 0;
+  width: 100%;
+}
+
+/* Desk: equal columns, top-aligned so badges + weekly share one visual band */
+@media (min-width: 721px) {
+  .app-footer.app-footer--desk {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(0.75rem, 2.5vw, 1.75rem);
+    align-items: start;
+  }
 }
 
 .app-footer__left {
@@ -545,16 +776,6 @@ html[data-posture='sitting'] .standing-badges__complete {
   align-items: flex-start;
   gap: 1rem;
   min-width: 0;
-  width: 100%;
-}
-
-.footer-standing {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 0.85rem 1.25rem;
   width: 100%;
 }
 
@@ -574,6 +795,17 @@ html[data-posture='sitting'] .standing-badges__complete {
 
 .app-footer__left .fact-carousel {
   width: 100%;
+}
+
+.app-footer--desk .app-footer__left .fact-carousel {
+  max-width: none;
+  align-items: flex-start;
+}
+
+.app-footer--desk .fact-carousel__text {
+  font-size: clamp(0.75rem, 1.65vw, 0.92rem);
+  line-height: 1.45;
+  max-width: 62ch;
 }
 
 .fact-carousel__text {
@@ -764,25 +996,24 @@ html[data-posture='sitting'] .standing-badges__complete {
 }
 
 .activity-log {
-  width: min(96vw, 900px);
-  margin: clamp(2.5rem, 12vh, 10rem) auto 0;
-  padding: 1.5rem clamp(1rem, 4vw, 2.5rem)
-    calc(3rem + env(safe-area-inset-bottom, 0px));
+  --al-text: var(--dt-ink-heading);
+  --al-muted: var(--dt-ink-muted);
+  --al-border: var(--dt-ink-border);
+  --al-surface: var(--dt-paper);
+  --al-surface-raised: var(--dt-paper-raised);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 1.75rem max(var(--dt-page-gutter), env(safe-area-inset-right, 0px))
+    calc(3rem + env(safe-area-inset-bottom, 0px))
+    max(var(--dt-page-gutter), env(safe-area-inset-left, 0px));
   position: relative;
   z-index: 2;
   flex-shrink: 0;
-  opacity: 0.4;
-  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.activity-log[data-visible='true'] {
-  opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .activity-log {
-    transition: none;
-  }
+  background: var(--al-surface);
+  color: var(--al-text);
+  color-scheme: light;
+  border-top: 1px solid var(--al-border);
 }
 
 .activity-log__title-row {
@@ -792,6 +1023,8 @@ html[data-posture='sitting'] .standing-badges__complete {
   justify-content: space-between;
   gap: 0.75rem 1rem;
   margin-bottom: 0.5rem;
+  max-width: min(96vw, 900px);
+  margin-inline: auto;
 }
 
 .activity-log__heading {
@@ -799,6 +1032,7 @@ html[data-posture='sitting'] .standing-badges__complete {
   font-size: clamp(0.75rem, 1.8vw, 0.9rem);
   font-weight: 700;
   letter-spacing: 0.08em;
+  color: var(--al-text);
 }
 
 .activity-log__export {
@@ -809,10 +1043,10 @@ html[data-posture='sitting'] .standing-badges__complete {
 
 .activity-log__export-btn {
   padding: 0.4rem 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid var(--al-border);
   border-radius: 0.35rem;
-  background: rgba(0, 0, 0, 0.12);
-  color: var(--dt-text-muted);
+  background: var(--al-surface-raised);
+  color: var(--al-muted);
   font-family: inherit;
   font-size: clamp(0.6rem, 1.4vw, 0.7rem);
   font-weight: 700;
@@ -821,12 +1055,14 @@ html[data-posture='sitting'] .standing-badges__complete {
   cursor: pointer;
   transition:
     background 0.15s ease,
-    color 0.15s ease;
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .activity-log__export-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--dt-text);
+  background: var(--dt-paper-hover);
+  color: var(--al-text);
+  border-color: color-mix(in srgb, var(--dt-ink-heading) 22%, transparent);
 }
 
 .activity-log__export-btn:active {
@@ -840,17 +1076,21 @@ html[data-posture='sitting'] .standing-badges__complete {
 }
 
 .activity-log__lede {
-  margin: 0 0 1.5rem;
+  max-width: min(96vw, 900px);
+  margin: 0 auto 1.5rem;
+  text-align: left;
   font-size: clamp(0.75rem, 1.8vw, 0.85rem);
   font-weight: 600;
-  color: var(--dt-text-muted);
+  color: var(--al-muted);
   text-transform: none;
   letter-spacing: 0.02em;
   line-height: 1.45;
-  max-width: 64ch;
 }
 
 .activity-log__block {
+  width: 100%;
+  max-width: min(96vw, 900px);
+  margin-inline: auto;
   margin-bottom: 1.75rem;
 }
 
@@ -863,14 +1103,14 @@ html[data-posture='sitting'] .standing-badges__complete {
   font-size: clamp(0.65rem, 1.5vw, 0.75rem);
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: var(--dt-text-muted);
+  color: var(--al-muted);
 }
 
 .activity-log__table-wrap {
   overflow-x: auto;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--al-border);
   border-radius: 0.35rem;
-  background: rgba(0, 0, 0, 0.12);
+  background: var(--dt-paper-table);
 }
 
 .activity-log__table {
@@ -890,12 +1130,13 @@ html[data-posture='sitting'] .standing-badges__complete {
 
 .activity-log__table th {
   font-weight: 700;
-  color: var(--dt-text-muted);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--al-muted);
+  border-bottom: 1px solid var(--al-border);
 }
 
 .activity-log__table td {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--al-text);
+  border-bottom: 1px solid color-mix(in srgb, var(--dt-ink-heading) 8%, transparent);
 }
 
 .activity-log__table tbody tr:last-child td {
@@ -903,13 +1144,14 @@ html[data-posture='sitting'] .standing-badges__complete {
 }
 
 .activity-log__table--week tbody tr[data-today='true'] td {
-  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--dt-pomo-focus) 7%, var(--dt-paper-table) 93%);
 }
 
 .activity-log__table tfoot td,
 .activity-log__table tfoot th {
   font-weight: 700;
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--al-text);
+  border-top: 1px solid var(--al-border);
   border-bottom: none;
   padding-top: 0.65rem;
 }
@@ -917,7 +1159,13 @@ html[data-posture='sitting'] .standing-badges__complete {
 /* —— Pomodoro —— */
 .app__main--pomodoro {
   min-height: min(80vh, 900px);
-  padding-bottom: 3rem;
+  /* No bottom padding: body/root red was showing through as a strip under the white article */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* Two grid rows: timer column, then article (sibling in DOM). Keeps the white band out of
+     the same box as the timer so it cannot paint a sliver above the fold. */
+  place-items: start stretch;
+  align-content: start;
+  justify-items: stretch;
 }
 
 .app__stage--pomodoro {
@@ -927,6 +1175,7 @@ html[data-posture='sitting'] .standing-badges__complete {
 .pomodoro {
   width: min(92vw, 480px);
   margin-inline: auto;
+  justify-self: center;
   text-transform: none;
   letter-spacing: 0.02em;
 }
@@ -990,8 +1239,8 @@ html[data-posture='sitting'] .standing-badges__complete {
   padding: 0.85rem 1rem;
   border: none;
   border-radius: 0.35rem;
-  background: #fff;
-  color: var(--dt-pomodoro-accent, #ba4949);
+  background: var(--dt-paper);
+  color: var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent));
   font-family: inherit;
   font-size: clamp(0.85rem, 2.2vw, 1rem);
   font-weight: 700;
@@ -1192,4 +1441,107 @@ html[data-posture='sitting'] .standing-badges__complete {
 
 .pomodoro__add-input::placeholder {
   color: rgba(255, 255, 255, 0.45);
+}
+
+/* Timer + tasks fill the first screen; article content starts below the fold */
+.pomodoro__above-fold {
+  box-sizing: border-box;
+  min-height: calc(100svh - var(--app-header-height) - 2rem);
+  min-height: calc(100dvh - var(--app-header-height) - 2rem);
+}
+
+/* Pomodoro: full-bleed white band below the fold (entire width, not a nested card) */
+.pomodoro-article-surface {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  /* padding-top (not margin-top) so the gap below the timer is white, not body red */
+  padding: calc(2.25rem + clamp(1.75rem, 4vw, 2.75rem)) 0
+    clamp(2.5rem, 5vw, 3.5rem);
+  box-sizing: border-box;
+  background: var(--dt-paper);
+  color-scheme: light;
+}
+
+.pomodoro-article-inner {
+  width: min(94vw, 44rem);
+  margin: 0 auto;
+  padding: 0 max(var(--dt-page-gutter), env(safe-area-inset-right, 0px)) 0
+    max(var(--dt-page-gutter), env(safe-area-inset-left, 0px));
+  box-sizing: border-box;
+}
+
+.pomodoro-article {
+  margin: 0;
+  padding: 0;
+  border: none;
+  color: var(--dt-ink);
+}
+
+.pomodoro-article__title {
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.05rem, 2.7vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--dt-ink-heading);
+  line-height: 1.3;
+}
+
+.pomodoro-article__section {
+  margin-bottom: 1.35rem;
+}
+
+.pomodoro-article__section:last-of-type {
+  margin-bottom: 0;
+}
+
+.pomodoro-article__h {
+  margin: 0 0 0.5rem;
+  font-size: clamp(0.8rem, 2.1vw, 0.95rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--dt-ink-heading);
+}
+
+.pomodoro-article__p {
+  margin: 0;
+  font-size: clamp(0.82rem, 2vw, 0.95rem);
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--dt-ink-subtle);
+}
+
+.pomodoro-article__sources {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--dt-ink-border);
+}
+
+.pomodoro-article__source-list {
+  margin: 0.5rem 0 0;
+  padding-left: 1.15rem;
+  font-size: clamp(0.75rem, 1.9vw, 0.85rem);
+  line-height: 1.7;
+  color: var(--dt-ink-muted);
+}
+
+.pomodoro-article__link {
+  color: var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent));
+  text-decoration: underline;
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent)) 45%,
+    transparent
+  );
+  text-underline-offset: 0.15em;
+}
+
+.pomodoro-article__link:hover {
+  color: color-mix(in srgb, var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent)) 78%, #000 22%);
+  text-decoration-color: var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent));
+}
+
+.pomodoro-article__link:focus-visible {
+  outline: 2px solid var(--dt-pomodoro-accent, var(--dt-pomo-focus-accent));
+  outline-offset: 2px;
+  border-radius: 0.15rem;
 }

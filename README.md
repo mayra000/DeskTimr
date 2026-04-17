@@ -1,22 +1,38 @@
-# DeskTimr
+# DeskFocus
 
-A browser-based productivity app for **tracking sitting vs. standing time** at your desk and running **Pomodoro-style focus sessions**—two modes in one interface.
+A browser-based productivity app that combines **desk posture tracking** (sitting vs. standing) with a **Pomodoro timer** and task list. Switch between the two experiences from the header; your choice is remembered for the next visit.
 
 ## What it does
 
-### Desk mode
+### Desk mode (standing timer)
 
-- **Timer** for your current posture (sitting or standing): **stopwatch** or **countdown**; play, pause, and clear the session.
-- **Posture reminders**: optional sounds and notifications when a countdown ends, plus a chime after each full hour spent sitting while the timer runs.
-- **Weekly standing goal** and **workweek badges** for gamified consistency.
-- **Weekly sitting summary**, rotating **wellness facts**, and an **activity log** (today + week) with optional **Excel export** (`.xlsx`) of your data.
-- **Celebrations** (confetti) when you hit standing-time milestones.
+- **Posture**: Track **sitting** or **standing** while the timer runs. Use **Switch to standing / Switch to sitting** to change posture (the current session time resets; if the timer was running, it keeps running).
+- **Stopwatch vs. countdown**: **Stopwatch** counts up the time you have been in the current posture. **Countdown** counts down from a target you set. Toggle modes with the clock/stopwatch control; switching modes pauses and clears the current session segment.
+- **Countdown editing**: When countdown is selected and the timer is **not** running, set **hours, minutes, and seconds** with number inputs and caret buttons (5-minute-friendly steps for duration changes where applicable).
+- **Controls**: **Play** (first press may ask for **browser notification** permission), **Pause**, and **Clear** when paused to zero out the session.
+- **Visual feedback**: A **posture-colored background fill** builds as time progresses. The page theme follows **sitting** vs. **standing**.
+- **Alerts**:
+  - When a **countdown** finishes: **chime** plus a **desktop notification** (if allowed), tailored to sitting vs. standing.
+  - While **sitting** with the timer running: a **chime and notification at each full hour** of sitting, with rotating stretch hints.
+  - While **standing** with the timer running: **confetti** every **30 minutes** of continuous standing in that session.
+- **Weekly sitting summary**: Large display of **time spent sitting this week** (hours / minutes / seconds). **Clear** (with confirmation) wipes saved sitting/standing logs, weekly totals, and resets the desk timer state.
+- **Standing goal**: Adjustable **daily standing target** (default **1 hour**, adjustable in **5-minute** steps between **5 minutes** and **8 hours**). Used with **Mon–Fri rings**: each weekday shows progress toward the goal (complete, in-progress ring, missed, or future).
+- **Wellness facts**: A **carousel** of short facts with **source links**; facts **auto-advance** on a timer and you can move **previous / next** manually.
+- **Activity log** (“Your log”): **Today** and **this week** (Monday-based week) for sitting vs. standing—only time **while the desk timer is running** counts. Export as **JSON** or **Excel** (`.xlsx`).
 
 ### Pomodoro mode
 
-- Classic **Pomodoro / short break / long break** phases with a task list: add tasks, pick an active task for the current focus block, and check items off.
+- **Phases**: **Pomodoro** (25 min), **short break** (5 min), **long break** (15 min). Use tabs to pick a phase when idle; starting the timer runs the current phase.
+- **Flow**: Completing a Pomodoro advances to a **short break**; after every **4th** completed Pomodoro, the next break is a **long break**. Completing a break returns to Pomodoro.
+- **Timer**: **START / PAUSE** toggles the countdown; remaining time is kept accurately across pauses.
+- **Tasks**: Add tasks (including with **Enter**), **mark done**, **select the active task** for focus (shown during Pomodoro), and **remove** tasks. Tasks (and active selection) persist in the browser.
+- **Feedback**: **Confetti** when you finish a Pomodoro. A short **in-app article** explains the Pomodoro Technique with an **external source** link.
 
-Data for desk mode is stored **locally in the browser** (`localStorage`). The app works as a static site with no backend required.
+### Data & privacy
+
+- **No server**: Everything runs in the browser as a **static site**.
+- **Local storage**: Desk session state, logs, goals, and facts index live in **`localStorage`** (desk data). Pomodoro tasks use a **separate** key. **App mode** (desk vs. Pomodoro) is remembered separately.
+- Clearing data from the weekly summary **only affects desk-mode** saved data (not Pomodoro tasks).
 
 ## Tech stack
 
@@ -57,6 +73,17 @@ This project is a **static Vite SPA**. Use **Node.js 20.19+** on the host.
 2. In [Vercel](https://vercel.com), **Add New → Project** and import the repository.
 3. Set **Build Command** to `npm run build` and **Output Directory** to `dist` (Vite defaults are usually correct).
 4. Deploy. The included `vercel.json` rewrites routes to `index.html` for client-side routing if you add a router later.
+
+## Before launch
+
+**Bottom line:** Treat this as ready to launch from a feature standpoint; invest a short block in metadata, naming, one privacy line, and cross-browser checks instead of new functionality unless you have a specific audience demand (e.g. teams, accounts, sync).
+
+Quick checklist:
+
+- **Metadata** — `index.html` includes a default description and Open Graph / Twitter tags. After you know the production URL, set `og:url` and optionally `og:image` to your canonical link and share image.
+- **Naming** — Align repository name, `package.json` `name`, page `<title>`, and in-app branding (the product name is **DeskFocus**; rename consistently if you prefer another public name).
+- **Privacy** — A short on-device-only note is shown at the bottom of the app.
+- **Cross-browser** — Smoke-test Safari, Chrome, and Firefox (plus a phone); try private/incognito once to see behavior when `localStorage` is restricted.
 
 ---
 
